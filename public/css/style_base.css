@@ -1,0 +1,124 @@
+/* Stylesheet for the base page
+ * (c) 2015 nXu - Zsolt Fekete
+ */
+
+body {
+    background: #f3f3f0;
+    font-family: serif;
+}
+
+td {
+    vertical-align: middle !important;
+}
+
+/* Elements by class */
+
+.red  {
+    color: red;
+}
+
+.container {
+    max-width: 760px !important;
+}
+
+.tmargin {
+    margin-top: 10px;
+}
+
+.navbar {
+    border-color: #4466ab;
+}
+
+.navbar-nav > li > a {
+    color: #333 !important;
+}
+
+.navbar-nav > li > a:hover {
+    color: #4466ab !important;
+}
+
+.content {
+    background: white;
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.content h2 {
+    text-align: left;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.content h2 a {
+    color: #333;
+}
+
+.content h2 a:hover {
+    color: #4466ab;
+    text-decoration: none;
+}
+
+.meta {
+    font-size: small;
+    color: #4466ab;
+    margin-top: -20px;
+}
+
+.tab-pane {
+    margin-top: 10px;
+}
+
+.recordtable th:hover {
+    cursor: pointer;
+}
+
+.tablesorter-headerAsc, .tablesorter-headerDesc {
+    text-decoration: underline;
+}
+
+.toggle-visibility {
+    background: transparent;
+}
+
+/* Elements by ID */
+#logo {
+    max-width: 150px;
+}
+
+h1#title {
+    margin-top: 75px;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+#footer img{
+    max-height: 100px;
+    margin-right: 50px;
+}
+
+#fblike {
+    margin-bottom: 10px;
+}
+
+#footer {
+    margin-bottom: 5px;
+    font-size: small;
+}
+
+
+@media (min-width: 768px) {
+    .navbar-nav {
+        width: 100%;
+        text-align: left;
+    }
+    .navbar-nav > li {
+        float: none;
+        display: inline-block;
+    }
+    .navbar-nav > li.navbar-right {
+        float: right !important;
+    }
+}

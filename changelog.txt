@@ -1,0 +1,31 @@
+Changelog of the project flk-honlap2
+(c) 2015 Zsolt Fekete - nXu
+
+20150317r1
+  - Upgraded to Laravel 5 (5.0.16) from 4.2
+    - Added proper namespacing
+    - Replaced old View::make() calls with simplified view()
+    - Replaced Response::json() calls with response()->json()
+    - Replaced '{{}}' tags with unescaped '{!! !!}' where necessary
+    - Replaced Input class with Request (using IoC)
+  - Created DB migrations
+    - Renamed albumURL column in the albums table to album_url to match 
+      conventions
+      - Renamed appropiate names in the related controllers and views
+    - Renamed Pages model to Page to match conventions
+      - Renamed appropiate names in PageController
+  - Created DB seedings
+    - Record categories
+    - Pages
+  - Replaced URL::to() / secure_url() with simple relative links where possible
+  - Updated Facebook authentication code
+    - Updated SammyK's Laravel Facebook SDK
+      - Now uses dependency injection using IoC containers instead of facades
+      - Refactored AccountController
+  - Added user activation backend (migration and login check)
+  - Replaced login check with proper middlewares
+    - Created AuthenticationMiddleware
+    - Created AdminCheckMiddleware
+  	- Now using appropiate 401 responses
+  - Added proper validation and validation messages
+    - Name change
