@@ -1,12 +1,7 @@
 # flk-honlap2
 
-## About
+## Warning
+Currently, this repository is only for developement purposes. The site still uses the old flk-honlap codebase. A realease date is still unknown.
 
-This is the source of the website of the FLK. It's live version is available at https://www.fertorakosi-loveszklub.hu
-
-## Requirements
-- Web server (live runs on nginx)
-- PHP 5.4+
-- A database engine (use of sqlite is possible)
-
-## Installation
+## Changelog
+See changelog.txt
