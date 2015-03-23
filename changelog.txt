@@ -1,9 +1,11 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
-2.0.0a3 - 2015-03-23
+2.0.0 - 2015-03-23
   - Added .travis.yml
   - Configured travis-ci support
+  - Updated readme
+  - Added license
 
 2.0.0a2 - 2015-03-23
   - Refactored large parts of the code for easier testing
@@ -21,7 +23,6 @@ Changelog of the project flk-honlap2
       - Removed validations from controllers
         - Changed error reporting in JSON response in NameChange
           - Changed relevant JS code in main.js
-
   - Implemented unit tests
     - Libraries
       - App\Libraries\UrlBeautifier

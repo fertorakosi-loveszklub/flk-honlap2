@@ -1,8 +1,37 @@
-# flk-honlap2
-[![Build Status](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2.svg?branch=master)](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2) [![GPL v3 License](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://github.com/fertorakosi-loveszklub/flk-honlap2/blob/master/LICENSE)
+# flk-honlap2 [![Build Status](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2.svg?branch=master)](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2) [![GPL v3 License](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/fertorakosi-loveszklub/flk-honlap2/blob/master/LICENSE)
 
-## Warning
-Currently, this repository is only for developement purposes. The live site still uses the old flk-honlap codebase. A realease date is still unknown.
+## About
+This is the source code of the official website of the FLK (Fertőrákosi Lövészklub). The site is built with Laravel 5 and is unit-tested (functional tests are a work in progress).
+
+## Requirements
+ - A web server (live site uses nginx)
+ - PHP 5.4+
+    - MCrypt extension
+    - Apache module or php5-fpm for nginx
+    - php5-cli for artisan
+ - A database (live site uses MySQL)
+ - Git
+ - Composer
+
+## Installation
+1. Clone this repo
+  - `$ git clone https://github.com/fertorakosi-loveszklub/flk-honlap2`
+2. Install required composer packages
+  - `$ composer install`
+3. Configure environment variables in `.env.example`. Names are self-explanatory.
+4. Rename `.env.example` to `.env`
+  - `$ mv .env.example .env`
+5. Migrate database
+  - `$ php artisan migrate`
+6. Seed database
+  - `$ php artisan db:seed`
+7. Configure web server rewrites (.htaccess or nginx server block). See Laravel 5 installation notes for details.
+
+## Testing
+To run the unit tests, install the `require-dev` packages with composer:
+`composer install --dev`
+
+Then run test by executing `phpunit`.
 
 ## Changelog
 See changelog.txt
