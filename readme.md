@@ -8,4 +8,4 @@ Currently, this repository is only for developement purposes. The live site stil
 See changelog.txt
 
 ## License
-The license is
+The license is GPLv3. See LICENSE for details.
