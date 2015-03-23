@@ -1,6 +1,8 @@
-<?php namespace App\Http\Controllers;
+<?php
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Libraries\UrlBeautifier;
 use App\News;
 use App\User;
 use Auth;
@@ -11,7 +13,7 @@ class NewsController extends BaseController
     /**
      * Initializes a new instance of the NewsController class.
      */
-    public function __construct() 
+    public function __construct()
     {
         // Actions that need login
         $this->middleware('admin', ['only' => ['getUj', 'postUj', 'getSzerkesztes',
@@ -88,9 +90,21 @@ class NewsController extends BaseController
         $n->content = $req->input('content');
         $n->user_id = Auth::user()->id;
 
+        // Validate
+        if (!$n->validate())
+        {
+            $errors = $n->getValidationErrors();
+
+            $msg = $errors->has('title') ? $errors->get('title')[0] : '';
+
+            return redirect('/hirek/')->with('message',
+                array('message' => $msg,
+                    'type' => 'danger'));
+        }
+
         $n->save();
 
-        return redirect('hirek')->with('message', array( 'message' => 'Hír létrehozva.',
+        return redirect('/hirek/')->with('message', array( 'message' => 'Hír létrehozva.',
             'type' => 'success'));
     }
 
@@ -135,9 +149,22 @@ class NewsController extends BaseController
 
         $hir->title = $req->input('title');
         $hir->content = $req->input('content');
+
+        // Validate
+        if (!$hir->validate())
+        {
+            $errors = $hir->getValidationErrors();
+
+            $msg = $errors->has('title') ? $errors->get('title')[0] : '';
+
+            return redirect('/hir/' . $id . '/' . UrlBeautifier::beautify($hir->title))->with('message',
+                array('message' => $msg,
+                    'type' => 'danger'));
+        }
+
         $hir->save();
 
-        return redirect('/hir/' . $id . '/' . News::urlFriendlify($hir->title))->with('message',
+        return redirect('/hir/' . $id . '/' . UrlBeautifier::beautify($hir->title))->with('message',
             array( 'message' => 'Hír frissítve.', 'type' => 'success'));
     }
 

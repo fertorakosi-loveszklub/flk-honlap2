@@ -16,11 +16,11 @@
 @overwrite
 
 @section('fb-og')
-    <meta property="og:title" content="{{ App\News::urlNormalize($news->title) }}" />
+    <meta property="og:title" content="{{ html_entity_decode($news->title) }}" />
 @overwrite
 
 @section('title')
-    {{App\News::urlNormalize($news->title)}} -
+    {{html_entity_decode($news->title)}} -
 @overwrite
 
 @if(Session::has('admin'))

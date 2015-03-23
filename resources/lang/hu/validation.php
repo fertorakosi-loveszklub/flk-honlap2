@@ -104,6 +104,11 @@ return [
 
 	'attributes' => [
 		'NewName'	=> "Név",
+		'real_name'	=> "Név",
+		'name'		=> "Név",
+
+		'title'		=> 'Cím',
+		'album_url' => 'Album URL'
 	],
 
 ];

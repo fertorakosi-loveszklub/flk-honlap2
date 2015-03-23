@@ -1,7 +1,9 @@
-<?php namespace App\Http\Controllers;
+<?php
+namespace App\Http\Controllers;
 
 use App\Album;
 use App\Http\Controllers\Controller;
+use App\Libraries\UrlBeautifier;
 use App\News;
 use Illuminate\Http\Request;
 
@@ -10,7 +12,7 @@ class AlbumController extends BaseController
     /**
      * Initializes a new instance of the AlbumController class.
      */
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('admin', ['only' => ['postUj', 'postSzerkesztes', 'getTorles']]);
     }
@@ -22,7 +24,7 @@ class AlbumController extends BaseController
     public function getIndex()
     {
         $albums = Album::orderBy('created_at', 'desc')->get();
-        return view('layouts.albums.list', array('albums' => $albums)); 
+        return view('layouts.albums.list', array('albums' => $albums));
     }
 
     /**
@@ -57,9 +59,23 @@ class AlbumController extends BaseController
         $album = new Album;
         $album->title = $req->input('title');
         $album->album_url = $req->input('album_url');
+
+        // Validate
+        if (!$album->validate())
+        {
+            $errors = $album->getValidationErrors();
+
+            $msg = $errors->has('title') ? $errors->get('title')[0] . '<br/>' : '';
+            $msg .= $errors->has('album_url') ? $errors->get('album_url')[0] : '';
+
+            return redirect('/galeria/')->with('message',
+                array('message' => $msg,
+                    'type' => 'danger'));
+        }
+
         $album->save();
 
-        return redirect('/album/' . $album->id . '/' . News::urlFriendlify($album->title))->with('message',
+        return redirect('/album/' . $album->id . '/' . App\Libraries\UrlBeautifier::beautify($album->title))->with('message',
             array( 'message' => 'Album létrehozva', 'type' => 'success'));
     }
 
@@ -79,9 +95,23 @@ class AlbumController extends BaseController
 
         $album->title = $req->input('title');
         $album->album_url = $req->input('album_url');
+
+        if (!$album->validate())
+        {
+            $errors = $album->getValidationErrors();
+
+            $msg = $errors->has('title') ? $errors->get('title')[0] . '<br/>' : '';
+            $msg .= $errors->has('album_url') ? $errors->get('album_url')[0] : '';
+
+            return redirect('/album/' . $id . '/' . UrlBeautifier::beautify($album->title))->with('message',
+                array('message' => $msg,
+                    'type' => 'danger'));
+        }
+
         $album->save();
 
-        return redirect('/album/' . $id . '/' . News::urlFriendlify($album->title))->with('message',
+        return redirect('/album/' . $id . '/' .
+            UrlBeautifier::beautify($album->title))->with('message',
             array( 'message' => 'Album frissítve', 'type' => 'success'));
     }
 

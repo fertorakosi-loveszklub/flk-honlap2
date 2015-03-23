@@ -1,10 +1,11 @@
 <?php namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
+use Auth;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Session;
 
-class User extends Model implements Authenticatable {
+class User extends BaseModel implements Authenticatable {
 	/**
 	 * The database table used by the model.
 	 *
@@ -19,6 +20,14 @@ class User extends Model implements Authenticatable {
 	protected $hidden = ['access_token', 'remember_token'];
 
 	/**
+	 * Validation rules.
+	 */
+	protected $validationRules = [
+		'name'		=> 'required|min:4',
+		'real_name' => 'required|min:4'
+	];
+
+	/**
 	 * Value indicating whether to use timestamps in the model.
 	 * @var boolean
 	 */
@@ -28,41 +37,52 @@ class User extends Model implements Authenticatable {
 	 * Returns the news created by the user.
 	 * @return Array Array of news created by the user.
 	 */
-	public function news() 
+	public function news()
 	{
 		return $this->hasMany('App\News', 'user_id', 'id');
 	}
 
 	/**
+	 * Logs in the current user and sets appropiate session variables.
+	 * @return void
+	 */
+	public function login()
+	{
+		Auth::login($this);
+		Session::put('user_full_name', $this->real_name);
+		Session::put('member', true);
+	}
+
+	/**
+	 * Updates the name of this user instance from the provided
+	 * Facebook graph object.
+	 * @param  GraphUser $fbUser Facebook graph object.
+	 * @return void
+	 */
+	public function updateFromGraphObject($fbUser)
+	{
+		$this->name = $fbUser['name'];
+	}
+
+	/**
+	 * Creates a model instance from a Facebook graph object.
 	 * @param $user Facebook User object to create or update in the database.
      */
-	public static function createOrUpdate($fbUser) 
+	public static function createFromGraphObject($fbUser)
 	{
-		$dbUser = User::find($fbUser['id']);
+		$user = new User;
+		$user->id = $fbUser['id'];
+		$user->name = $fbUser['name'];
+		$user->real_name = $user->name;
+		$user->is_activated = false;
 
-		if (is_null($dbUser)) {
-			// Not in DB yet, create it
-			$user = new User;
-			$user->id = $fbUser['id'];
-			$user->name = $fbUser['name'];
-			$user->real_name = $user->name;
-
-			$user->save();
-
-			return $user;
-		} else {
-			// User already in DB, update FB name
-			$dbUser->name = $fbUser['name'];
-			$dbUser->save();
-
-			return $dbUser;
-		}
+		return $user;
 	}
 
 	/**
 	 * Methods of the Illuminate\Contracts\Auth\Authenticatable interface
 	 */
-	
+
 	/**
 	 * Gets the ID used to authenticate.
 	 * @return string ID used to authenticate.
@@ -87,7 +107,7 @@ class User extends Model implements Authenticatable {
 	 * Gets the remember token used to authenticate.
 	 * @return string The remember token.
 	 */
-	public function getRememberToken() 
+	public function getRememberToken()
 	{
 		return $this->remember_token;
 	}
@@ -96,7 +116,7 @@ class User extends Model implements Authenticatable {
 	 * Sets the remember token of the user.
 	 * @param string $token Remember token.
 	 * @return void
-	 */	
+	 */
 	public function setRememberToken($token)
 	{
 		$this->remember_token = $token;

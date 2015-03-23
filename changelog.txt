@@ -1,7 +1,36 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
-20150317r1
+2.0.0a2 - 2015-03-23
+  - Refactored large parts of the code for easier testing
+    - Implemented App\Libraries\UrlBeautifier
+      - Removed relevant methods from the App\News class.
+      - Replaced relevant method calls
+    - Implemented App\Libraries\FacebookAuthenticator and
+                  App\Libraries\FacebookAuthorizer
+      - Removed a lot of code from AuthController
+      - Made the login action workflow a lot cleaner
+    - Implemented login method in the User model
+    - Created App\ValidatableInterface for easier model validation
+      - Created a default implementation called BaseModel
+      - All models changed to extend BaseModel instead of Model
+      - Removed validations from controllers
+        - Changed error reporting in JSON response in NameChange
+          - Changed relevant JS code in main.js
+
+  - Implemented unit tests
+    - Libraries
+      - App\Libraries\UrlBeautifier
+      - App\Libraries\FacebookAuthenticator
+      - App\Libraries\FacebookAuthorizer
+    - Models
+      - App\BaseModel
+      - App\Album
+      - App\News
+      - App\Record
+      - App\User
+
+2.0.0a1 - 2015-03-17
   - Upgraded to Laravel 5 (5.0.16) from 4.2
     - Added proper namespacing
     - Replaced old View::make() calls with simplified view()
@@ -9,7 +38,7 @@ Changelog of the project flk-honlap2
     - Replaced '{{}}' tags with unescaped '{!! !!}' where necessary
     - Replaced Input class with Request (using IoC)
   - Created DB migrations
-    - Renamed albumURL column in the albums table to album_url to match 
+    - Renamed albumURL column in the albums table to album_url to match
       conventions
       - Renamed appropiate names in the related controllers and views
     - Renamed Pages model to Page to match conventions
@@ -26,6 +55,6 @@ Changelog of the project flk-honlap2
   - Replaced login check with proper middlewares
     - Created AuthenticationMiddleware
     - Created AdminCheckMiddleware
-  	- Now using appropiate 401 responses
+    - Now using appropiate 401 responses
   - Added proper validation and validation messages
     - Name change

@@ -8,7 +8,7 @@
                 @foreach($albums as $album)
                     <tr>
                         <td>{{ $album->title }}</td>
-                        <td><a href="/album/{{ $album->id . '/' . App\News::urlFriendlify($album->title) }}">Megtekintés</a></td>
+                        <td><a href="/album/{{ $album->id . '/' . App\Libraries\UrlBeautifier::beautify($album->title) }}">Megtekintés</a></td>
                     </tr>
                 @endforeach
             </tbody>

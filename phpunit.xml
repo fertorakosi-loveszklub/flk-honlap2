@@ -19,5 +19,7 @@
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="DB_DRIVER" value="sqlite"/>
+        <env name="TEST_DB" value=":memory:"/>
     </php>
 </phpunit>

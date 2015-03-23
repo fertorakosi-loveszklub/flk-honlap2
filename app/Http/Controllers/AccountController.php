@@ -1,7 +1,10 @@
-<?php 
+<?php
 namespace App\Http\Controllers;
 
+use App\Exceptions\AuthTokenException, App\Exceptions\FacebookRequestException;
 use App\Http\Controllers\Controller;
+use App\Libraries\FacebookAuthenticator;
+use App\Libraries\FacebookAuthorizer;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -13,7 +16,7 @@ class AccountController extends BaseController
     /**
      * Initializes a new instance of the AccountController class.
      */
-    public function __construct() 
+    public function __construct()
     {
         // Actions that need login
         $this->middleware('auth', ['only' => ['postUjNev', 'getKilepes']]);
@@ -26,39 +29,32 @@ class AccountController extends BaseController
      */
     public function getBelepes(LaravelFacebookSdk $fb)
     {
-        // Get Facebook access token from the redirection parameters
+        $auth = new FacebookAuthenticator($fb);
+        $authorizer = new FacebookAuthorizer($fb);
+
         try
         {
-            $token = $fb->getAccessTokenFromRedirect();
-
-            if (!$token)
-            {
-                return redirect('/')->with('message', array( 
-                    'message' => 'A Facebook belépés sikertelen. Kérlek, próbáld újra.',
-                    'type' => 'warning'));
-            }
+            // Get Facebook access token from the redirection parameters
+            $token = $auth->getTokenFromRedirect();
         }
-        catch (FacebookQueryBuilderException $e)
+        catch (AuthTokenException $e)
         {
             // Error
-            return redirect('/')->with('message', array( 
-                'message' => $e->getPrevious()->getMessage(),
-                'type' => 'danger'));
+            return redirect('/')->with('message', array(
+                'message' => 'Sajnálatos hiba történt, kérlek, próbáld újra.',
+                'type' => 'warning'));
         }
 
         // Extend access token if necessary
-        if (!$token->isLongLived())
+        try
         {
-            try
-            {
-                $token = $token->extend();
-            }
-            catch (FacebookQueryBuilderException $e)
-            {
-                return redirect('/')->with('message', array(
-                    'message' => $e->getPrevious()->getMessage(),
-                    'type' => 'danger'));
-            }
+            $token = $auth->extendToken($token);
+        }
+        catch (AuthTokenException $e)
+        {
+            return redirect('/')->with('message', array(
+                'message' => 'Hiba a token meghosszabbításakor.',
+                'type' => 'danger'));
         }
 
         // Set access token
@@ -68,30 +64,60 @@ class AccountController extends BaseController
         try
         {
             $response = $fb->get('/me?fields=id,name');
-            $user = $response->getGraphUser();
+            $fbUser = $auth->getGraphUser($response);
         }
-        catch (FacebookQueryBuilderException $e)
+        catch (FacebookRequestException $e)
         {
             return redirect('/')->with('message', array(
-                'message' => $e->getPrevious()->getMessage(),
+                'message' => 'Hiba a Facebookkal való kommunikáció közben',
                 'type' => 'danger'));
         }
-        
+
+        // Check if user already exists in the local database
+        $user = User::find($fbUser['id']);
+        if (is_null($user))
+        {
+            // Doesn't exist yet, create it
+            $user = User::createFromGraphObject($fbUser);
+        }
+        else
+        {
+            // Already exists, update name
+            $user->updateFromGraphObject($fbUser);
+        }
+
+        // Save created or updated user
+        $user->save();
+
         // Check admin privileges
-        $isAdmin = $this->checkAdmin($user['id'], $token, $fb);
+        $roles = $authorizer->getUsers($token);
+        $isAdmin = $authorizer->is_admin($user['id'], $roles);
 
-        // Login user
-        $activated = $this->loginUser($user, $isAdmin);
+        // Only log in activated users.
+        if ($isAdmin)
+        {
+            // Admins are handled as activated
+            $user->login();
 
-        // Check if activated
-        if (!$activated && !$isAdmin) {
-            // User not yet activated by an admin
-            return redirect('/')->with('message', array( 
+            // Mark user as admin for the current session
+            $authorizer->makeUserAdmin();
+        }
+        else if ($user->is_activated)
+        {
+            // User is activated, login
+            $user->login();
+        }
+        else
+        {
+            // User is not activated, display warning
+            return redirect('/')->with('message', array(
                 'message' => 'A belépés sikeres, de mielőtt használni kezdhetnéd
-                a fiókod, ellenőriznünk kell, valóban klubtag vagy-e. Értesítünk, amint megtörtént.',
+                a fiókod, ellenőriznünk kell, valóban klubtag vagy-e.
+                Értesítünk, amint ez megtörtént.',
                 'type' => 'warning'));
         }
 
+        // Redirect to the main page
         return redirect('/');
     }
 
@@ -108,16 +134,19 @@ class AccountController extends BaseController
             'newName'   => null
         );
 
-        // Validate name
-        $validation = array(
-            'NewName'       => 'required|min:4',
-        );
-
-        $this->validate($request, $validation);
-
         // Change name
         $user = Auth::user();
         $user->real_name = $request->input('NewName');
+
+        // Validate
+        if (!$user->validate())
+        {
+            // Return validation error
+            $response['message'] = $user->getValidationErrors();
+            return response()->json($response);
+        }
+
+        // Everything ok, save
         $user->save();
 
         Session::put('user_full_name', $user->real_name);
@@ -148,79 +177,5 @@ class AccountController extends BaseController
         Session::forget('member');
         Auth::logout();
         return redirect('/');
-    }
-
-    /**
-     * Authenticates a user. Checks if it is already in the database,
-     * if not, saves it as an inactivated user. If it is, logs it in.
-     * @param  User    $user    User object.
-     * @param  boolean $isAdmin A value indicating whether the user is an admin.
-     *                          Admins will be logged in without activation check.
-     * @return boolean          True if user is registered and activated.
-     *                           False if not.
-     */
-    public function loginUser($user, $isAdmin = false)
-    {
-        $activated = true;
-
-        // Check if user exists
-        if (User::find($user['id']) == null) {
-            // Does not exist
-            $activated = false;
-        }
-
-        // Create the user if not exists or update existing
-        $user = User::createOrUpdate($user);
-
-        // Check if activated
-        $activated = $activated && $user->is_activated;
-
-        // Log in if activated
-        if ($activated || $isAdmin) {
-            Session::put('user_full_name', $user->real_name);
-            Session::put('member', true);
-            Auth::login($user);
-        }
-
-        // Return
-        return $activated || $isAdmin;
-    }
-
-    /**
-     * Checks if the user is an admin and if it is, it saves it for
-     * the current session..
-     * @param  string $userId      User id to check.
-     * @param  string $tokenBackup Current access token, it will be saved.
-     * @param  object $fb          Laravel Facebook SDK instance.
-     * @return boolean             True if the user is an admin, otherwise
-     *                             false.
-     */
-    public function checkAdmin($userId, $tokenBackup, LaravelFacebookSdk $fb) 
-    {
-        try {
-            // Sett app access token
-            $fb->setDefaultAccessToken(env('FACEBOOK_APP_ID') . '|' . env('FACEBOOK_APP_SECRET'));
-
-            // Get roles
-            $response = $fb->get('228336310678604/roles');
-            $roles = $response->getGraphList(); 
-
-            // Restore saved token
-            $fb->setDefaultAccessToken($tokenBackup);
-        }
-        catch (Exception $e)
-        {
-            return false;
-        }
-
-        // Loop through roles, check for user id with 'administrators' role
-        foreach($roles as $r) {
-            if ($userId == $r['user'] && $r['role'] == 'administrators') {
-                Session::put('admin', true);
-                return true;
-            }
-        }
-
-        return false;
     }
 }

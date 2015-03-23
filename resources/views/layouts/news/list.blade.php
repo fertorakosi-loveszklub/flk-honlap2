@@ -3,7 +3,7 @@
 @section ('content')
     @foreach ($news as $n)
         <div class="content text-justify">
-            <h2><a href="/hir/{{$n->id . '/' . App\News::urlFriendlify($n->title) }}">{{ $n->title }}</a></h2>
+            <h2><a href="/hir/{{$n->id . '/' . App\Libraries\UrlBeautifier::beautify($n->title) }}">{{ $n->title }}</a></h2>
             <p class="meta">{{ $n->author->real_name }} - {{ (new DateTime($n->created_at))->format('Y. m. d.') }} </p>
             {!! $n->content !!}
         </div>

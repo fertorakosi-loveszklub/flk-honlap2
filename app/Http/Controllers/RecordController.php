@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers;
+<?php
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Record;
@@ -13,7 +14,7 @@ class RecordController extends BaseController
     /**
      * Initializes a new instance of the AlbumController class.
      */
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('auth', ['only' => ['getUj', 'postUj', 'getSajat',
             'getTorles', 'getLathatosag', 'getGrafikon']]);
@@ -52,27 +53,7 @@ class RecordController extends BaseController
      */
     public function postUj(Request $req)
     {
-        // Validate input
-        $validator = Validator::make(
-            $req->all(),
-            array(
-                'imgurl'        => 'regex:/^https?:\/\/i\.imgur\.com\/[a-zA-Z0-9]+\.jpe?g$/',
-                'category'      => 'exists:record_categories,id',
-                'shots'         => 'integer|between:1,30',
-                'points'        => 'integer|between:1,300',
-                'shot_at'       => 'date',
-                'visibility'    => 'in:private,public'
-            ));
-
-        // No need to send / display validation error messages.
-        // There is JS validation and as JS is required for uploading 
-        // anyways, validation errors should not occur on server side
-        // for a nice user.
-        if ($validator->fails()) {
-            return redirect('/rekordok/uj')->with('message',
-                array( 'message' => 'Hibás adatok.', 'type' => 'danger'));
-        }
-
+        // Get is_public from visibility
         $is_public = $req->input('visibility') == 'public' ? true : false;
 
         // Save record
@@ -85,6 +66,18 @@ class RecordController extends BaseController
         $record->image_url      = $req->input('imgurl');
         $record->shots_average  = round($record->points / $record->shots * 10, 2);
         $record->is_public      = $is_public;
+
+        if (!$record->validate())
+        {
+            // No need to send / display validation error messages.
+            // There is JS validation and as JS is required for uploading
+            // anyways, validation errors should not occur on server side
+            // for a nice user.
+            return redirect('/rekordok/uj')->with('message',
+                    array( 'message' => 'Hibás adatok.', 'type' => 'danger'));
+        }
+
+        // Save record
         $record->save();
 
         return redirect('/rekordok/sajat')->with('message',
@@ -96,7 +89,7 @@ class RecordController extends BaseController
      * Displays the list of all own records.
      * @return mixed View
      */
-    public function getSajat() 
+    public function getSajat()
     {
         // Get categories
         $categories = RecordCategory::with(array('records' => function($query)
@@ -114,7 +107,7 @@ class RecordController extends BaseController
      * @param $id       Id of the category to get the records of.
      * @return mixed    JSON
      */
-    public function getRekordok($id) 
+    public function getRekordok($id)
     {
         $response = array(
             'success'   => 'false',
@@ -150,7 +143,7 @@ class RecordController extends BaseController
      * @param $id       Id of the record to delete.
      * @return mixed    View
      */
-    public function getTorles($id) 
+    public function getTorles($id)
     {
         // Check if record exists and belongs to the user currently logged in
         $record = Record::find($id);
@@ -172,7 +165,7 @@ class RecordController extends BaseController
      * @param $id       Id of the record to toggle.
      * @return mixed    JSON
      */
-    public function getLathatosag($id) 
+    public function getLathatosag($id)
     {
         $response = array(
             'success'   => 'false',
@@ -201,7 +194,7 @@ class RecordController extends BaseController
      * Returns data for displaying a line chart of the progress of the user (records with given category id)
      * @return JSON
      */
-    public function getGrafikon($id) 
+    public function getGrafikon($id)
     {
         $response = array(
             'success'   => 'false',

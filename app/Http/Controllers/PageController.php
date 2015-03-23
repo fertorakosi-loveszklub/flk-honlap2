@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers;
+<?php
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Page;
@@ -9,7 +10,7 @@ class PageController extends BaseController
     /**
      * Initializes a new instance of the PageController class.
      */
-    public function __construct() 
+    public function __construct()
     {
         // Actions that need login
         $this->middleware('admin', ['only' => ['getSzerkesztes', 'postSzerkesztes']]);
@@ -29,7 +30,7 @@ class PageController extends BaseController
      * Displays the history (DB: pages/id=tortenet)
      * @return mixed View
      */
-    public function getTortenet() 
+    public function getTortenet()
     {
         $page = Page::find('tortenet');
 
@@ -48,7 +49,7 @@ class PageController extends BaseController
      * Displays the order of shootings (DB: pages/id=edzesek)
      * @return mixed View
      */
-    public function getEdzesek() 
+    public function getEdzesek()
     {
         $page = Page::find('edzesek');
 
@@ -66,7 +67,7 @@ class PageController extends BaseController
      * Displays the prices (DB: pages/id=arak)
      * @return mixed View
      */
-    public function getArak() 
+    public function getArak()
     {
         $page = Page::find('arak');
 
@@ -84,7 +85,7 @@ class PageController extends BaseController
      * Displays the contact details (DB: pages/id=elerhetosegek)
      * @return mixed View
      */
-    public function getElerhetosegek() 
+    public function getElerhetosegek()
     {
         $page = Page::find('elerhetosegek');
 
@@ -106,7 +107,7 @@ class PageController extends BaseController
      * @param $id       Id of the page to edit.
      * @return mixed    View
      */
-    public function getSzerkesztes($id) 
+    public function getSzerkesztes($id)
     {
         $page = Page::find($id);
 
@@ -132,7 +133,7 @@ class PageController extends BaseController
      * @param $id       Id of the page to update.
      * @return mixed    View.
      */
-    public function postSzerkesztes($id, Request $req) 
+    public function postSzerkesztes($id, Request $req)
     {
         $page = Page::find($id);
 

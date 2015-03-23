@@ -28,7 +28,13 @@ $(document).ready(function() {
             success     : function(data, textStatus, xhr) {
                 if (!data.success) {
                     // Error
-                    $('#NameChangeError').html(data.message);
+                    // Check if error message is an array
+                    if (data.message.hasOwnProperty('real_name')) {
+                        $('#NameChangeError').html(data.message.real_name[0]);
+                    }
+                    else {
+                        $('#NameChangeError').html(data.message);
+                    }
                 } else {
                     // Success
                     $('#NameChangeError').hide();
