@@ -29,3 +29,7 @@ Route::controller('rekordok', 'RecordController');
 
 // Felhasználó
 Route::controller('felhasznalo', 'AccountController');
+Route::controller('tagok', 'MemberController');
+
+// Tagdij
+Route::controller('tagdij', 'PaymentController');

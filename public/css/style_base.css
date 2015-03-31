@@ -83,6 +83,19 @@ td {
     background: transparent;
 }
 
+.vmargin {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.sort {
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: bold;
+}
+
 /* Elements by ID */
 #logo {
     max-width: 150px;

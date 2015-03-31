@@ -3,13 +3,14 @@
 use Auth;
 use Closure;
 
-class AuthenticationMiddleware {
-
+class AuthenticationMiddleware
+{
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -18,8 +19,7 @@ class AuthenticationMiddleware {
             // User logged in
             return $next($request);
         } else {
-            return response('Nem vagy bejelentkezve', 401);
+            return abort(401);
         }
     }
-
 }

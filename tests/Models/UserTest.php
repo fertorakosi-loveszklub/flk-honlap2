@@ -6,7 +6,7 @@ class UserTest extends TestCase
 {
     public function test_if_login_is_successful()
     {
-        $user = new User;
+        $user = new User();
         $user->login();
 
         // Assert session has a member key
@@ -21,7 +21,7 @@ class UserTest extends TestCase
     {
         $expected = 'Test Name';
 
-        $user = new User;
+        $user = new User();
         $user->real_name = $expected;
         $user->login();
 
@@ -32,7 +32,7 @@ class UserTest extends TestCase
     {
         $expected = '1234';
 
-        $user = new User;
+        $user = new User();
         $user->id = $expected;
         $user->login();
 
@@ -45,7 +45,7 @@ class UserTest extends TestCase
 
         $fbUser = [
             "id"    => $expected,
-            "name"  => "Test name"
+            "name"  => "Test name",
         ];
 
         $user = User::createFromGraphObject($fbUser);
@@ -59,7 +59,7 @@ class UserTest extends TestCase
 
         $fbUser = [
             'id'    => '1234',
-            'name'  => $expected
+            'name'  => $expected,
         ];
 
         $user = User::createFromGraphObject($fbUser);
@@ -73,10 +73,10 @@ class UserTest extends TestCase
 
         $fbUser = [
             'id'    => '1234',
-            'name'  => $expected
+            'name'  => $expected,
         ];
 
-        $user = new User;
+        $user = new User();
         $user->name = 'Old name';
         $user->updateFromGraphObject($fbUser);
 
@@ -84,12 +84,11 @@ class UserTest extends TestCase
     }
 
     /**
-     * Validation tests
+     * Validation tests.
      */
-
     public function test_if_name_must_be_at_least_4_characters()
     {
-        $user = new User;
+        $user = new User();
         $user->real_name = 'Test name';
         $user->name = 'xxx';
 
@@ -98,10 +97,21 @@ class UserTest extends TestCase
 
     public function test_if_real_name_must_be_at_least_4_characters()
     {
-        $user = new User;
+        $user = new User();
         $user->name = 'Test name';
         $user->real_name = 'xxx';
 
         $this->assertFalse($user->validate(), 'Failed asserting that the real name must be at least 4 characters.');
+    }
+
+    public function test_if_new_user_is_not_activated()
+    {
+        $user = Mockery::mock('App\User[getAttribute]');
+        $user->shouldReceive('getAttribute')
+             ->with('member')
+             ->once()
+             ->andReturn(null);
+
+        $this->assertFalse($user->isActivated(), 'Failed asserting that a new user is inactive by default.');
     }
 }

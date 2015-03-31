@@ -1,13 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Record;
 use App\RecordCategory;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
-use Validator;
 
 class RecordController extends BaseController
 {
@@ -17,12 +15,13 @@ class RecordController extends BaseController
     public function __construct()
     {
         $this->middleware('auth', ['only' => ['getUj', 'postUj', 'getSajat',
-            'getTorles', 'getLathatosag', 'getGrafikon']]);
+            'getTorles', 'getLathatosag', 'getGrafikon', ]]);
     }
 
     /**
      * GET method, index route (/)
      * Displays the overview of the top records.
+     *
      * @return mixed View
      */
     public function getIndex()
@@ -36,6 +35,7 @@ class RecordController extends BaseController
     /**
      * GET method, uj route(/uj
      * Displays the form to upload a new record.
+     *
      * @return mixed View
      */
     public function getUj()
@@ -49,6 +49,7 @@ class RecordController extends BaseController
     /**
      * POST method, uj route (/uj)
      * Saves a new record.
+     *
      * @return mixed View
      */
     public function postUj(Request $req)
@@ -57,7 +58,7 @@ class RecordController extends BaseController
         $is_public = $req->input('visibility') == 'public' ? true : false;
 
         // Save record
-        $record = new Record;
+        $record = new Record();
         $record->user_id        = Auth::user()->id;
         $record->category_id    = $req->input('category');
         $record->shots          = $req->input('shots');
@@ -67,36 +68,39 @@ class RecordController extends BaseController
         $record->shots_average  = round($record->points / $record->shots * 10, 2);
         $record->is_public      = $is_public;
 
-        if (!$record->validate())
-        {
+        if (!$record->validate()) {
             // No need to send / display validation error messages.
             // There is JS validation and as JS is required for uploading
             // anyways, validation errors should not occur on server side
             // for a nice user.
-            return redirect('/rekordok/uj')->with('message',
-                    array( 'message' => 'Hibás adatok.', 'type' => 'danger'));
+            return redirect('/rekordok/uj')->with(
+                'message',
+                array( 'message' => 'Hibás adatok.', 'type' => 'danger')
+            );
         }
 
         // Save record
         $record->save();
 
-        return redirect('/rekordok/sajat')->with('message',
-            array( 'message' => 'Rekord feltöltve.', 'type' => 'success'));
+        return redirect('/rekordok/sajat')->with(
+            'message',
+            array( 'message' => 'Rekord feltöltve.', 'type' => 'success')
+        );
     }
 
     /**
      * GET method, sajat route (/sajat)
      * Displays the list of all own records.
+     *
      * @return mixed View
      */
     public function getSajat()
     {
         // Get categories
-        $categories = RecordCategory::with(array('records' => function($query)
-        {
+        $categories = RecordCategory::with(array('records' => function ($query) {
             $query->where('user_id', '=', Auth::user()->id);
 
-        }))->get();
+        }, ))->get();
 
         return view('layouts.records.own', array('categories' => $categories));
     }
@@ -104,20 +108,23 @@ class RecordController extends BaseController
     /**
      * GET method, rekordok route (/rekordok/$id)
      * Loads top records with given category id.
+     *
      * @param $id       Id of the category to get the records of.
-     * @return mixed    JSON
+     *
+     * @return mixed JSON
      */
     public function getRekordok($id)
     {
         $response = array(
             'success'   => 'false',
             'message'   => null,
-            'data'      => null
+            'data'      => null,
         );
 
         // Check if category id is valid
-        if(RecordCategory::find($id) == null) {
+        if (RecordCategory::find($id) == null) {
             $response['message'] = "Érvénytelen kategória";
+
             return response()->json($response);
         }
 
@@ -132,7 +139,7 @@ class RecordController extends BaseController
             ->get();
 
         $response['success'] = true;
-        $response['data'] = (array)$data;
+        $response['data'] = (array) $data;
 
         return response()->json($response);
     }
@@ -140,8 +147,10 @@ class RecordController extends BaseController
     /**
      * GET method, torles route (/torles/$id)
      * Deletes a record with the given id.
+     *
      * @param $id       Id of the record to delete.
-     * @return mixed    View
+     *
+     * @return mixed View
      */
     public function getTorles($id)
     {
@@ -155,22 +164,26 @@ class RecordController extends BaseController
         // Delete record
         $record->delete();
 
-        return redirect('/rekordok/sajat')->with('message',
-            array('message' => 'Rekord törölve.', 'type' => 'success'));
+        return redirect('/rekordok/sajat')->with(
+            'message',
+            array('message' => 'Rekord törölve.', 'type' => 'success')
+        );
     }
 
     /**
      * GET method, lathatosag route (/lathatosag/$id)
      * Toggles the visibility (is_public property) of a given record.
+     *
      * @param $id       Id of the record to toggle.
-     * @return mixed    JSON
+     *
+     * @return mixed JSON
      */
     public function getLathatosag($id)
     {
         $response = array(
             'success'   => 'false',
             'message'   => null,
-            'isPublic'  => null
+            'isPublic'  => null,
         );
 
         // Check if record exists and belongs to the user currently logged in
@@ -178,6 +191,7 @@ class RecordController extends BaseController
 
         if ($record == null || $record->user_id != Auth::user()->id) {
             $response['message'] = 'Érvénytelen ID vagy nem saját rekord.';
+
             return response()->json($response);
         }
 
@@ -186,12 +200,14 @@ class RecordController extends BaseController
 
         $response['success'] = true;
         $response['isPublic'] = $record->is_public;
+
         return response()->json($response);
     }
 
     /**
      * GET method, grafikon route (/grafikon/$id)
-     * Returns data for displaying a line chart of the progress of the user (records with given category id)
+     * Returns data for displaying a line chart of the progress of the user (records with given category id).
+     *
      * @return JSON
      */
     public function getGrafikon($id)
@@ -199,7 +215,7 @@ class RecordController extends BaseController
         $response = array(
             'success'   => 'false',
             'message'   => null,
-            'data'  => null
+            'data'  => null,
         );
 
         // Get entries for each category
@@ -211,12 +227,13 @@ class RecordController extends BaseController
             ->orderBy('date', 'asc')
             ->get();
 
-        if (count($entries) == 0){
+        if (count($entries) == 0) {
             $response['message'] = 'Nincsenek eredmények.';
+
             return response()->json($response);
         }
 
-        /**
+        /*
          * $entries has one record per per day.
          * We have to make an array which is:
          *  -  An array of arrays, which are
@@ -244,6 +261,7 @@ class RecordController extends BaseController
 
         $response['success'] = true;
         $response['data'] = $data;
+
         return response()->json($response);
     }
 }

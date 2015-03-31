@@ -3,7 +3,6 @@ namespace App\Libraries;
 
 use App\Exceptions\AuthTokenException;
 use App\Exceptions\FacebookRequestException;
-
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
 /**
@@ -13,12 +12,14 @@ class FacebookAuthenticator
 {
     /**
      * The Facebook SDK object.
+     *
      * @var SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
      */
     private $fb;
 
     /**
      * Initializes a news instance of the FacebookAuthenticator class.
+     *
      * @param SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb Facebook SDK.
      */
     public function __construct($fb)
@@ -28,26 +29,24 @@ class FacebookAuthenticator
 
     /**
      * Gets the token from the redirection url.
-     * @param  SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb Facebook object.
-     * @return Token     Facebook access token.
+     *
+     * @param SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb Facebook object.
+     *
+     * @return Token Facebook access token.
      */
     public function getTokenFromRedirect()
     {
-        try
-        {
+        try {
             // Get token
             $token = $this->fb->getAccessTokenFromRedirect();
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             // Error happened
-            throw new AuthTokenException;
+            throw new AuthTokenException();
         }
 
-        if (!$token)
-        {
+        if (!$token) {
             // Token not received
-            throw new AuthTokenException;
+            throw new AuthTokenException();
         }
 
         return $token;
@@ -55,23 +54,21 @@ class FacebookAuthenticator
 
     /**
      * Exctends a Facebook access token if neccessary.
-     * @param  Token $token Access token to extend.
-     * @return Token        Extended token.
+     *
+     * @param Token $token Access token to extend.
+     *
+     * @return Token Extended token.
      */
     public function extendToken($token)
     {
-        if (!$token->isLongLived())
-        {
+        if (!$token->isLongLived()) {
             // Not extended yet
-            try
-            {
+            try {
                 // Extend
                 $token = $token->extend();
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 // Error happened
-                throw new AuthTokenException;
+                throw new AuthTokenException();
             }
 
             return $token;
@@ -83,21 +80,20 @@ class FacebookAuthenticator
 
     /**
      * Get the currently graph object of the current user logged in.
+     *
      * @return GraphUser Graph user.
      */
     public function getGraphUser($response)
     {
-        try
-        {
+        try {
             // FB->get() is from SammyK's fully unit tested FB SDK
             // No need for separate test
             $response = $this->fb->get('/me?fields=id,name');
+
             return $response->getGraphUser();
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             // Error happened
-            throw new FacebookRequestException;
+            throw new FacebookRequestException();
         }
     }
 }

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class RecordCategory extends BaseModel {
-
+class RecordCategory extends BaseModel
+{
     /**
      * The database table used by the model.
      *

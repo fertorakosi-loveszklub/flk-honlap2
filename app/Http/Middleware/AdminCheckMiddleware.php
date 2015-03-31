@@ -3,13 +3,14 @@
 use Closure;
 use Session;
 
-class AdminCheckMiddleware {
-
+class AdminCheckMiddleware
+{
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -17,7 +18,7 @@ class AdminCheckMiddleware {
         if (Session::has('admin')) {
             return $next($request);
         } else {
-            return response('Csak adminisztrátoroknak', 401);
+            return abort(401);
         }
     }
 }

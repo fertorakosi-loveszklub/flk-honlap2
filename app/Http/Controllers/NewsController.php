@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Libraries\UrlBeautifier;
 use App\News;
 use App\User;
@@ -17,12 +16,13 @@ class NewsController extends BaseController
     {
         // Actions that need login
         $this->middleware('admin', ['only' => ['getUj', 'postUj', 'getSzerkesztes',
-            'postSzerkesztes', 'getTorles']]);
+            'postSzerkesztes', 'getTorles', ]]);
     }
 
     /**
      * GET method, index route (/)
      * Displays the list of the last 10 news.
+     *
      * @return mixed View
      */
     public function getIndex()
@@ -37,11 +37,14 @@ class NewsController extends BaseController
     /**
      * GET method, custom route (//hir/$id/$title)
      * Shows a news with the given id.
+     *
      * @param $id       Id of the news to show
      * @param $title    Title of the news (unused)
-     * @return mixed    View
+     *
+     * @return mixed View
      */
-    public function getShowNews($id, $title) {
+    public function getShowNews($id, $title)
+    {
 
         // Check if ID is numeric
         $id = strval($id);
@@ -59,10 +62,12 @@ class NewsController extends BaseController
 
     /**
      * GET method, uj route (/uj)
-     * Displays a form for adding a new news
+     * Displays a form for adding a new news.
+     *
      * @return mixed View
      */
-    public function getUj() {
+    public function getUj()
+    {
         $options = array(
             'pageTitle'     => 'Új hír írása',
             'editAction'    => '/hirek/uj',
@@ -71,50 +76,57 @@ class NewsController extends BaseController
             'content'       => '',
 
         );
+
         return view('layouts.editor.editor', $options);
     }
 
     /**
      * POST method, uj route (/uj)
      * Saves a new news.
+     *
      * @return mixed View
      */
-    public function postUj(Request $req) {
+    public function postUj(Request $req)
+    {
         if (!$req->has('title') || !$req->has('content')) {
             redirect('/hirek/uj')->with('message', array( 'message' => 'Hiányzó cím vagy szöveg',
-                'type' => 'danger'));
+                'type' => 'danger', ));
         }
 
-        $n = new News;
+        $n = new News();
         $n->title = htmlentities($req->input('title'));
         $n->content = $req->input('content');
         $n->user_id = Auth::user()->id;
 
         // Validate
-        if (!$n->validate())
-        {
+        if (!$n->validate()) {
             $errors = $n->getValidationErrors();
 
             $msg = $errors->has('title') ? $errors->get('title')[0] : '';
 
-            return redirect('/hirek/')->with('message',
+            return redirect('/hirek/')->with(
+                'message',
                 array('message' => $msg,
-                    'type' => 'danger'));
+                    'type' => 'danger', )
+            );
         }
 
         $n->save();
 
         return redirect('/hirek/')->with('message', array( 'message' => 'Hír létrehozva.',
-            'type' => 'success'));
+            'type' => 'success', ));
     }
 
     /**
      * GET method, szerkesztes route (/szerkesztes/$id)
      * Displays a form for editing news.
+     *
      * @param $id       News to edit.
-     * @return mixed    View.
+     *
+     * @return mixed View.
      */
-    public function getSzerkesztes($id) {
+    public function getSzerkesztes($id)
+    {
         $hir = News::find($id);
 
         // Check if real id
@@ -124,10 +136,10 @@ class NewsController extends BaseController
 
         $options = array(
             'pageTitle'     => 'Hír szerkesztése',
-            'editAction'    => '/hirek/szerkesztes/' . $hir->id,
+            'editAction'    => '/hirek/szerkesztes/'.$hir->id,
             'titleReadonly' => false,
             'title'         => $hir->title,
-            'content'       => $hir->content
+            'content'       => $hir->content,
         );
 
         return view('layouts.editor.editor', $options);
@@ -136,10 +148,13 @@ class NewsController extends BaseController
     /**
      * POST method, szerkesztes route (/szerkesztes/$id)
      * Updates an existing news with the given id.
+     *
      * @param $id       Id of the news to update.
-     * @return mixed    View
+     *
+     * @return mixed View
      */
-    public function postSzerkesztes($id, Request $req) {
+    public function postSzerkesztes($id, Request $req)
+    {
         $hir = News::find($id);
 
         // Check if real id
@@ -151,30 +166,36 @@ class NewsController extends BaseController
         $hir->content = $req->input('content');
 
         // Validate
-        if (!$hir->validate())
-        {
+        if (!$hir->validate()) {
             $errors = $hir->getValidationErrors();
 
             $msg = $errors->has('title') ? $errors->get('title')[0] : '';
 
-            return redirect('/hir/' . $id . '/' . UrlBeautifier::beautify($hir->title))->with('message',
+            return redirect('/hir/'.$id.'/'.UrlBeautifier::beautify($hir->title))->with(
+                'message',
                 array('message' => $msg,
-                    'type' => 'danger'));
+                    'type' => 'danger', )
+            );
         }
 
         $hir->save();
 
-        return redirect('/hir/' . $id . '/' . UrlBeautifier::beautify($hir->title))->with('message',
-            array( 'message' => 'Hír frissítve.', 'type' => 'success'));
+        return redirect('/hir/'.$id.'/'.UrlBeautifier::beautify($hir->title))->with(
+            'message',
+            array('message' => 'Hír frissítve.', 'type' => 'success')
+        );
     }
 
     /**
      * GET method, torles route (/torles/$id)
      * Deletes a news with the given id.
+     *
      * @param $id       Id of the news to delete.
-     * @return mixed    View
+     *
+     * @return mixed View
      */
-    public function getTorles($id) {
+    public function getTorles($id)
+    {
         $hir = News::find($id);
 
         // Check if real id
@@ -184,7 +205,9 @@ class NewsController extends BaseController
 
         $hir->delete();
 
-        return redirect('/hirek/')->with('message',
-            array( 'message' => 'Hír törölve.', 'type' => 'success'));
+        return redirect('/hirek/')->with(
+            'message',
+            array( 'message' => 'Hír törölve.', 'type' => 'success')
+        );
     }
 }

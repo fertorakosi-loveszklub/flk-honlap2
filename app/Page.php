@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Page extends BaseModel {
-
+class Page extends BaseModel
+{
     /**
      * The database table used by the model.
      *

@@ -54,7 +54,7 @@
             <div class="form-group">
                 <label for="shot_at" class="col-sm-3 control-label">Dátum</label>
                 <div class="col-sm-9">
-                    <input type="date" class="default-disabled form-control" id="shot_at" name="shot_at" placeholder="2015-01-01" required>
+                    <input type="date" class="default-disabled form-control" id="shot_at" name="shot_at" placeholder="2015-01-01" value="{{ (new DateTime('now'))->format('Y-m-d') }}"required>
                 </div>
             </div>
 

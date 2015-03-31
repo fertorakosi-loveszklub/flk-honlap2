@@ -2,11 +2,10 @@
 
 use App\Libraries\UrlBeautifier;
 
-class UrlBeautifierTest extends TestCase {
+class UrlBeautifierTest extends TestCase
+{
     /**
      * Tests if multiple spaces are replaced by a single hyphen.
-     *
-     * @return void
      */
     public function test_if_spaces_are_replaced_by_hyphen()
     {
@@ -19,8 +18,6 @@ class UrlBeautifierTest extends TestCase {
 
     /**
      * Tests if html entities are replaced correctly.
-     *
-     * @return void
      */
     public function test_if_html_entities_are_replaced()
     {
@@ -33,8 +30,6 @@ class UrlBeautifierTest extends TestCase {
 
     /**
      * Tests if hungarian characters are replaced correctly.
-     *
-     * @return void
      */
     public function test_if_hungarian_characters_are_replaced()
     {
@@ -47,8 +42,6 @@ class UrlBeautifierTest extends TestCase {
 
     /**
      * Tests if other characters are trimmed correctly.
-     *
-     * @return void
      */
     public function test_if_other_characters_are_trimmed()
     {

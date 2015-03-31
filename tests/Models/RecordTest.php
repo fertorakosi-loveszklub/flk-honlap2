@@ -20,7 +20,7 @@ class RecordTest extends TestCase
         // Get highest record category id
         $max_record_id = DB::table('record_categories')->max('id');
 
-        $this->record = new Record;
+        $this->record = new Record();
         $this->record->imgurl   = 'http://i.imgur.com/3hVkx2x.jpg';
         $this->record->category = $max_record_id;
         $this->record->shots    = 10;

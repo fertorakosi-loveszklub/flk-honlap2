@@ -1,16 +1,23 @@
+<?php
+
+    // Get waiting list
+    if (Session::has('admin')) {
+        $waitingList = App\User::whereNull('member_id')->count();
+    }
+?>
 <!DOCTYPE html>
 <html lang="hu">
     <head>
         <meta charset="utf-8">
         <title>@yield('title') Fertőrákosi Lövészklub</title>
-        <link rel="shortcut icon" type="image/png" href="{{ secure_asset('images/logo.png') }}">
+        <link rel="shortcut icon" type="image/png" href="/images/logo.png">
 
         <!-- Mobile -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Style -->
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/css/style_base.css">
 
         <!-- Scripts -->
@@ -114,10 +121,21 @@
                         <li class="navbar-right">
                             @if(Auth::check())
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-expanded="false"><i class="fa fa-facebook"></i> <span id="UserFullName">{{ Session::get('user_full_name') }}</span> <span class="caret"></span></a>
+                                   aria-expanded="false"><i class="fa fa-facebook"></i> <span id="UserFullName">{{ Session::get('user_full_name') }}</span> @if(Session::has('admin') && $waitingList > 0) <span class="badge">{{ $waitingList }}</span> @endif <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
+                                    @if(Session::has('admin'))
+                                        <li><a href="/tagok/"><i class="fa fa-fw fa-users"></i> Tagnyilvántartás</a></li>
+                                        <li>
+                                            <a href="/tagok/varolista">
+                                                <i class="fa fa-fw fa-list-alt"></i> Várólista @if($waitingList > 0) <span class="badge">{{ $waitingList }}</span> @endif
+                                            </a>
+                                        </li>
+                                        <li><a href="/tagdij/"><i class="fa fa-fw fa-credit-card"></i> Tagdíjak</a></li>
+                                        <li class="nav-divider"></li>
+                                    @endif
                                     @yield('adminmenu')
                                     @if(Session::has('member'))
+                                        <li><a href="/tagok/profil"><i class="fa fa-fw fa-user"></i> Profilom</a></li>
                                         <li><a href="/rekordok/sajat"><i class="fa fa-trophy fa-fw"></i> Saját eredményeim</a></li>
                                         <li><a href="/rekordok/uj"><i class="fa fa-plus fa-fw"></i> Új eredmény feltöltése</a></li>
                                         <li class="nav-divider"></li>

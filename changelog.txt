@@ -1,6 +1,43 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.1.0a1 - 2015-03-31
+  - Replaced absolute https url to the shortcut icon with relative
+  - Refactored controllers, library code, middlewares and models to follow 
+    the PSR coding formats
+    - Tests are only partially fixed (no namespaces, not matching method names)
+  - TODO : Implemented the registry of members
+    - Created migrations for the tables members and payments
+    - Created models
+      - App\Member
+      - App\Payment
+    - Created controllers
+      - MemberController
+        - Updated router to handle /tagok/* route with the MemberController
+      - PaymentController
+        - Updated router to handle /tagdij/* route with PaymentController
+    - Created views
+      - layouts.members
+        - .jsoninput
+        - .list
+        - .editor
+        - .own
+        - .connectable-members
+        - .connectable-users
+        - .waitinglist
+      - layouts.payments
+        - .new
+        - .list
+    - Added link to the member list to master layout
+    - Added link to the payment list to master layout
+    - Added link to the waiting list to master layout
+      - Added code querying waiting list
+    - Implemented a profile overview for users
+      - Added link to the profile to master layout
+    - Deleted is_activated column. A user is now considered active if it has a
+      non-null Member entity associated with it.
+      - Unit test checking that a new user is inactive by default
+
 2.0.0 - 2015-03-23
   - Added .travis.yml
   - Configured travis-ci support

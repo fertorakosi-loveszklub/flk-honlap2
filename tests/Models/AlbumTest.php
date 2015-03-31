@@ -6,7 +6,7 @@ class AlbumTest extends TestCase
 {
     public function test_if_title_has_to_be_at_least_3_characters()
     {
-        $album = new Album;
+        $album = new Album();
         $album->title = 'x';
         $album->album_url = 'Loooooooooooooooooong test URL';
 
@@ -15,7 +15,7 @@ class AlbumTest extends TestCase
 
     public function test_if_album_url_has_to_be_at_least_20_characters()
     {
-        $album = new Album;
+        $album = new Album();
         $album->title = 'Test title';
         $album->album_url = 'x';
 

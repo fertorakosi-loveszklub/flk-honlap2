@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Exceptions\AuthTokenException, App\Exceptions\FacebookRequestException;
-use App\Http\Controllers\Controller;
+use App\Exceptions\AuthTokenException;
+use App\Exceptions\FacebookRequestException;
 use App\Libraries\FacebookAuthenticator;
 use App\Libraries\FacebookAuthorizer;
 use App\User;
@@ -19,12 +19,14 @@ class AccountController extends BaseController
     public function __construct()
     {
         // Actions that need login
-        $this->middleware('auth', ['only' => ['postUjNev', 'getKilepes']]);
+        $this->middleware('admin', ['only' => ['getTorles']]);
+        $this->middleware('auth', ['only' => ['postUjNev']]);
     }
 
     /**
      * GET method, belepes route (/belepes)
      * Callback for the facebook login.
+     *
      * @return mixed Redirection
      */
     public function getBelepes(LaravelFacebookSdk $fb)
@@ -32,89 +34,73 @@ class AccountController extends BaseController
         $auth = new FacebookAuthenticator($fb);
         $authorizer = new FacebookAuthorizer($fb);
 
-        try
-        {
+        try {
             // Get Facebook access token from the redirection parameters
             $token = $auth->getTokenFromRedirect();
-        }
-        catch (AuthTokenException $e)
-        {
+        } catch (AuthTokenException $e) {
             // Error
             return redirect('/')->with('message', array(
                 'message' => 'Sajnálatos hiba történt, kérlek, próbáld újra.',
-                'type' => 'warning'));
+                'type' => 'warning', ));
         }
 
         // Extend access token if necessary
-        try
-        {
+        try {
             $token = $auth->extendToken($token);
-        }
-        catch (AuthTokenException $e)
-        {
+        } catch (AuthTokenException $e) {
             return redirect('/')->with('message', array(
                 'message' => 'Hiba a token meghosszabbításakor.',
-                'type' => 'danger'));
+                'type' => 'danger', ));
         }
 
         // Set access token
         $fb->setDefaultAccessToken($token);
 
         //Get user info
-        try
-        {
+        try {
             $response = $fb->get('/me?fields=id,name');
             $fbUser = $auth->getGraphUser($response);
-        }
-        catch (FacebookRequestException $e)
-        {
+        } catch (FacebookRequestException $e) {
             return redirect('/')->with('message', array(
                 'message' => 'Hiba a Facebookkal való kommunikáció közben',
-                'type' => 'danger'));
+                'type' => 'danger', ));
         }
 
         // Check if user already exists in the local database
         $user = User::find($fbUser['id']);
-        if (is_null($user))
-        {
+        if (is_null($user)) {
             // Doesn't exist yet, create it
             $user = User::createFromGraphObject($fbUser);
-        }
-        else
-        {
+        } else {
             // Already exists, update name
             $user->updateFromGraphObject($fbUser);
         }
 
-        // Save created or updated user
+        // Save created or updated user. Save the token as well
+        $user->access_token = $token;
         $user->save();
 
         // Check admin privileges
         $roles = $authorizer->getUsers($token);
-        $isAdmin = $authorizer->is_admin($user['id'], $roles);
+        $isAdmin = $authorizer->isAdmin($user['id'], $roles);
 
         // Only log in activated users.
-        if ($isAdmin)
-        {
+        if ($isAdmin) {
             // Admins are handled as activated
             $user->login();
 
             // Mark user as admin for the current session
             $authorizer->makeUserAdmin();
-        }
-        else if ($user->is_activated)
-        {
+        } elseif ($user->isActivated()) {
             // User is activated, login
             $user->login();
-        }
-        else
-        {
+        } else {
             // User is not activated, display warning
             return redirect('/')->with('message', array(
                 'message' => 'A belépés sikeres, de mielőtt használni kezdhetnéd
                 a fiókod, ellenőriznünk kell, valóban klubtag vagy-e.
                 Értesítünk, amint ez megtörtént.',
-                'type' => 'warning'));
+                'type' => 'warning', ));
         }
 
         // Redirect to the main page
@@ -124,6 +110,7 @@ class AccountController extends BaseController
     /**
      * POST method, uj-nev route(/uj-nev/)
      * Updates the real name of the currently logged in user.
+     *
      * @return mixed JSON
      */
     public function postUjNev(Request $request)
@@ -131,7 +118,7 @@ class AccountController extends BaseController
         $response = array(
             'success'   => false,
             'message'   => null,
-            'newName'   => null
+            'newName'   => null,
         );
 
         // Change name
@@ -139,10 +126,10 @@ class AccountController extends BaseController
         $user->real_name = $request->input('NewName');
 
         // Validate
-        if (!$user->validate())
-        {
+        if (!$user->validate()) {
             // Return validation error
             $response['message'] = $user->getValidationErrors();
+
             return response()->json($response);
         }
 
@@ -158,7 +145,8 @@ class AccountController extends BaseController
     }
 
     /**
-     * GET method, facebook route (/facebook)
+     * GET method, facebook route (/facebook).
+     *
      * @return Redirect to Facebook login
      */
     public function getFacebook(LaravelFacebookSdk $fb)
@@ -168,6 +156,7 @@ class AccountController extends BaseController
 
     /**
      * Logouts a user and destroys its session data.
+     *
      * @return Redirection.
      */
     public function getKilepes()
@@ -176,6 +165,42 @@ class AccountController extends BaseController
         Session::forget('admin');
         Session::forget('member');
         Auth::logout();
+
         return redirect('/');
+    }
+
+    /**
+     * GET method, torles route (/torles/{id})
+     * @param  string $id ID of the user to delete.
+     * @return Redirect
+     */
+    public function getTorles($id)
+    {
+        // Get user
+        $user = User::find($id);
+
+        // Check if ID is valid
+        if (is_null($user)) {
+            return redirect('/tagok/varolista')->with(
+                [
+                    'message' => [
+                        'message'   => 'Érvénytelen ID',
+                        'type'      => 'danger'
+                    ]
+                ]
+            );
+        };
+
+        // Delete user
+        $user->delete();
+
+        return redirect('/tagok/varolista')->with(
+            [
+                    'message' => [
+                        'message'   => 'Felhasználó törölve',
+                        'type'      => 'success'
+                    ]
+                ]
+        );
     }
 }
