@@ -28,6 +28,15 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="amount" class="col-sm-3 control-label">
+                        Elkönyvelt összeg
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" name="amount" class="form-control" min="0"
+                        max="100000">
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-9 col-sm-offset-3">
                         <input type="submit" class="btn btn-primary" value="Mentés">
                     </div>

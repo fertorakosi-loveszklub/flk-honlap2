@@ -65,7 +65,7 @@
                 <div class="col-sm-10">
                   <input type="number" class="form-control" id="card_id" name="card_id"
                   @if(isset($member)) value="{{ $member->card_id }}" @endif >
-
+                  @if(isset($nextCardId))<p>A következő elérhető sorszám: {{ $nextCardId }}</p>@endif
                   @if(isset($error) && $error->has('card_id'))<p class="text-danger"> {{ $error->get('card_id')[0] }}</p>@endif
                 </div>
               </div>

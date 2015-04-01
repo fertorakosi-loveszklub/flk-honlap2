@@ -3,15 +3,20 @@
 @section('content')
     <div class="content">
         <h1><i class="fa fa-fw fa-users"></i> Tagnyilvántartás</h1>
-
+        <h4 class="vmargin">Tagok száma: {{ $members->count() }}</h4>
         <div id="member-list">
 
             <div class="row vmargin">
-                <div class="col-xs-8 col-sm-10">
+                <div class="col-xs-6 col-sm-8">
                     <input type="text" class="form-control search" placeholder="Keresés (név, Facebook név vagy születési dátum)">
                 </div>
-                <div class="col-xs-4 col-sm-2">
-                    <a class="btn btn-primary" href="/tagok/uj"><i class="fa fa-fw fa-user-plus"></i> Új tag</a>
+                <div class="col-xs-6 col-sm-4">
+                    <a class="btn btn-primary" href="/nyomtatas/tag-attekintes" target="_blank">
+                        <i class="fa fa-fw fa-print"></i> Taglista
+                    </a>
+                    <a class="btn btn-primary" href="/tagok/uj">
+                        <i class="fa fa-fw fa-user-plus"></i> Új tag
+                    </a>
                 </div>
             </div>
 
@@ -47,6 +52,10 @@
                         </td>
                         <td class="member-actions">
                             <a class="btn btn-primary" title="Szerkesztés" href="/tagok/szerkesztes/{{ $member->id }}"><i class="fa fa-fw fa-pencil"></i></a>
+                            <a class="btn btn-primary" title="Részletek nyomtatása"
+                            href="/nyomtatas/tag-reszletek/{{ $member->id }}" target="_blank">
+                                <i class="fa fa-fw fa-print"></i>
+                            </a>
                             <a class="btn btn-primary" title="Tagdíjfizetés könyvelése"
                             href="/tagdij/fizetes/{{ $member->id }}">
                                 <i class="fa fa-fw fa-money"></i>

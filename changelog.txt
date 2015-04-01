@@ -1,12 +1,28 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.1.0a2 - 2015-03-31
+  - Added amount to the payment
+    - Updated controller
+    - Updated model
+    - Updated creation view
+  - Member edit view now displays highest card id in use when adding new member
+  - Member overview now displays number of members
+  - Member overview now displays printable overview button
+  - Member overview now displays printable member overview button
+  - Payment overview now displays a printable overview button
+  - Create simple, printable views for member overview:
+    - printables.members.overview
+    - printables.members.single
+    - printables.payments.overview
+    - layouts.payments.printsettings
+
 2.1.0a1 - 2015-03-31
   - Replaced absolute https url to the shortcut icon with relative
   - Refactored controllers, library code, middlewares and models to follow 
     the PSR coding formats
     - Tests are only partially fixed (no namespaces, not matching method names)
-  - TODO : Implemented the registry of members
+  - Implemented the registry of members
     - Created migrations for the tables members and payments
     - Created models
       - App\Member

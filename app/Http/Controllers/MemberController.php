@@ -37,7 +37,7 @@ class MemberController extends Controller
 
         return view('layouts.members.list')->with(['members' => $members]);
     }
-
+    
     /**
      * GET method, uj route (/uj).
      *
@@ -45,7 +45,10 @@ class MemberController extends Controller
      */
     public function getUj()
     {
-        return view('layouts.members.editor')->with(['title' => 'Új tag']);
+        $nextCardId = Member::max('card_id') + 1;
+
+        return view('layouts.members.editor')->with(['title'      => 'Új tag',
+                                                     'nextCardId' => $nextCardId]);
     }
 
     /**

@@ -33,3 +33,6 @@ Route::controller('tagok', 'MemberController');
 
 // Tagdij
 Route::controller('tagdij', 'PaymentController');
+
+// Nyomtatas
+Route::controller('nyomtatas', 'PrintableController');
