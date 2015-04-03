@@ -2,9 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Album;
-use App\Http\Controllers\Controller;
 use App\Libraries\UrlBeautifier;
-use App\News;
 use Illuminate\Http\Request;
 
 class AlbumController extends BaseController
@@ -19,22 +17,27 @@ class AlbumController extends BaseController
     /**
      * GET method, index route (/)
      * Displays the list of all albums.
+     *
      * @return mixed View
      */
     public function getIndex()
     {
         $albums = Album::orderBy('created_at', 'desc')->get();
+
         return view('layouts.albums.list', array('albums' => $albums));
     }
 
     /**
      * GET method, custom route (//album/$id/$title)
      * Displays all images of an album with the given id.
+     *
      * @param $id       Id of the album to display.
      * @param $title    Title of the album. Unused.
-     * @return mixed    View
+     *
+     * @return mixed View
      */
-    public function getShowAlbum($id, $title) {
+    public function getShowAlbum($id, $title)
+    {
         $album = Album::find($id);
 
         // Check if album is valid
@@ -48,44 +51,52 @@ class AlbumController extends BaseController
     /**
      * POST method, uj route (/uj)
      * Saves a new album.
+     *
      * @return mixed View
      */
-    public function postUj(Request $req) {
+    public function postUj(Request $req)
+    {
         if (! $req->has('title') || ! $req->has('album_url')) {
             redirect('/galeria/')->with('message', array( 'message' => 'Hiányzó cím vagy URL',
-                'type' => 'danger'));
+                'type' => 'danger', ));
         }
 
-        $album = new Album;
+        $album = new Album();
         $album->title = $req->input('title');
         $album->album_url = $req->input('album_url');
 
         // Validate
-        if (!$album->validate())
-        {
+        if (!$album->validate()) {
             $errors = $album->getValidationErrors();
 
-            $msg = $errors->has('title') ? $errors->get('title')[0] . '<br/>' : '';
+            $msg = $errors->has('title') ? $errors->get('title')[0].'<br/>' : '';
             $msg .= $errors->has('album_url') ? $errors->get('album_url')[0] : '';
 
-            return redirect('/galeria/')->with('message',
+            return redirect('/galeria/')->with(
+                'message',
                 array('message' => $msg,
-                    'type' => 'danger'));
+                    'type' => 'danger', )
+            );
         }
 
         $album->save();
 
-        return redirect('/album/' . $album->id . '/' . App\Libraries\UrlBeautifier::beautify($album->title))->with('message',
-            array( 'message' => 'Album létrehozva', 'type' => 'success'));
+        return redirect('/album/'.$album->id.'/'.UrlBeautifier::beautify($album->title))->with(
+            'message',
+            array( 'message' => 'Album létrehozva', 'type' => 'success')
+        );
     }
 
     /**
      * POST method, szerkesztes route (/szerkesztes/$id)
      * Saves the changes to an album with the given id.
+     *
      * @param $id       Id of the album to save.
-     * @return mixed    View
+     *
+     * @return mixed View
      */
-    public function postSzerkesztes($id, Request $req) {
+    public function postSzerkesztes($id, Request $req)
+    {
         $album = Album::find($id);
 
         // Check if album is valid
@@ -96,32 +107,38 @@ class AlbumController extends BaseController
         $album->title = $req->input('title');
         $album->album_url = $req->input('album_url');
 
-        if (!$album->validate())
-        {
+        if (!$album->validate()) {
             $errors = $album->getValidationErrors();
 
-            $msg = $errors->has('title') ? $errors->get('title')[0] . '<br/>' : '';
+            $msg = $errors->has('title') ? $errors->get('title')[0].'<br/>' : '';
             $msg .= $errors->has('album_url') ? $errors->get('album_url')[0] : '';
 
-            return redirect('/album/' . $id . '/' . UrlBeautifier::beautify($album->title))->with('message',
+            return redirect('/album/'.$id.'/'.UrlBeautifier::beautify($album->title))->with(
+                'message',
                 array('message' => $msg,
-                    'type' => 'danger'));
+                    'type' => 'danger', )
+            );
         }
 
         $album->save();
 
-        return redirect('/album/' . $id . '/' .
-            UrlBeautifier::beautify($album->title))->with('message',
-            array( 'message' => 'Album frissítve', 'type' => 'success'));
+        return redirect('/album/'.$id.'/'.
+            UrlBeautifier::beautify($album->title))->with(
+                'message',
+                array( 'message' => 'Album frissítve', 'type' => 'success')
+            );
     }
 
     /**
      * GET method, torles route (/torles/$id)
      * Deletes an album with the given id.
+     *
      * @param $id       ID of the album to delete.
-     * @return mixed    View
+     *
+     * @return mixed View
      */
-    public function getTorles($id) {
+    public function getTorles($id)
+    {
         $album = Album::find($id);
 
         // Check if real id
@@ -131,7 +148,9 @@ class AlbumController extends BaseController
 
         $album->delete();
 
-        return redirect('/galeria/')->with('message',
-            array( 'message' => 'Album törölve.', 'type' => 'success'));
+        return redirect('/galeria/')->with(
+            'message',
+            array( 'message' => 'Album törölve.', 'type' => 'success')
+        );
     }
 }

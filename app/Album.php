@@ -9,11 +9,12 @@ class Album extends BaseModel
 
     /**
      * The validation rules.
+     *
      * @var array
      */
     protected $validationRules = [
         'title'     => 'required|min:3',
-        'album_url' => 'required|min:20'
+        'album_url' => 'required|min:20',
     ];
 
     /**

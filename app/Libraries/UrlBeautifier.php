@@ -6,8 +6,10 @@ class UrlBeautifier
     /**
      * Beautifies a URL. Removes whitespace characters and transliterates
      * umlauts and HTML entities to readable latin latters.
-     * @param  string $url  URL to beautify.
-     * @return string       Beautiful URL.
+     *
+     * @param string $url URL to beautify.
+     *
+     * @return string Beautiful URL.
      */
     public static function beautify($url)
     {
@@ -19,7 +21,7 @@ class UrlBeautifier
 
         // Umlauts and such
         setlocale(LC_CTYPE, 'en_US.UTF-8');
-        $url = iconv("utf-8","ASCII//TRANSLIT//IGNORE", $url);
+        $url = iconv("utf-8", "ASCII//TRANSLIT//IGNORE", $url);
 
         // Ignore everything else
         $url = preg_replace("/[^a-zA-Z0-9\-]/", '', $url);

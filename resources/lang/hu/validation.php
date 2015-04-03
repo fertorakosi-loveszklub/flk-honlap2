@@ -29,7 +29,7 @@ return [
 	],
 	"boolean"              => "The :attribute field must be true or false.",
 	"confirmed"            => "The :attribute confirmation does not match.",
-	"date"                 => "The :attribute is not a valid date.",
+	"date"                 => "A :attribute mezőnek érvényes dátumnak kell lennie.",
 	"date_format"          => "The :attribute does not match the format :format.",
 	"different"            => "The :attribute and :other must be different.",
 	"digits"               => "The :attribute must be :digits digits.",
@@ -70,7 +70,7 @@ return [
 		"string"  => "The :attribute must be :size characters.",
 		"array"   => "The :attribute must contain :size items.",
 	],
-	"unique"               => "The :attribute has already been taken.",
+	"unique"               => "A választott :attribute már foglalt.",
 	"url"                  => "The :attribute format is invalid.",
 	"timezone"             => "The :attribute must be a valid zone.",
 
@@ -108,7 +108,14 @@ return [
 		'name'		=> "Név",
 
 		'title'		=> 'Cím',
-		'album_url' => 'Album URL'
+		'album_url' => 'Album URL',
+
+        'birth_date'    => 'Születési idő',
+        'birth_place'   => 'Születési hely',
+        'mother_name'   => 'Anyja neve',
+        'address'       => 'Cím',
+        'member_since'  => 'Tagság kezdete',
+        'card_id'		=> 'Igazolásszám'
 	],
 
 ];

@@ -47,7 +47,7 @@ class FacebookAuthenticatorTest extends TestCase
         $fb = Mockery::mock('LaravelFacebookSdk');
         $fb->shouldReceive('getAccessTokenFromRedirect')
            ->once()
-           ->andThrow(new Facebook\Exceptions\FacebookSDKException);
+           ->andThrow(new Facebook\Exceptions\FacebookSDKException());
 
         // Call method. Exepction is expected.
         $auth = new FacebookAuthenticator($fb);
@@ -108,7 +108,7 @@ class FacebookAuthenticatorTest extends TestCase
         // Return string
         $token->shouldReceive('extend')
               ->once()
-              ->andThrow(new Facebook\Exceptions\FacebookSDKException);
+              ->andThrow(new Facebook\Exceptions\FacebookSDKException());
 
         // Facebook object should not be accessed
         $auth = new FacebookAuthenticator(null);
@@ -144,7 +144,7 @@ class FacebookAuthenticatorTest extends TestCase
         $response = Mockery::mock('FacebookResponse');
         $response->shouldReceive('getGraphUser')
                  ->once()
-                 ->andThrow(new Facebook\Exceptions\FacebookSDKException);
+                 ->andThrow(new Facebook\Exceptions\FacebookSDKException());
 
         $fb = Mockery::mock('LaravelFacebookSdk');
         $fb->shouldReceive('get')

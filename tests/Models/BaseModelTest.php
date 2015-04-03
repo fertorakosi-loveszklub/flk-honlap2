@@ -1,7 +1,6 @@
 <?php
 
 use App\BaseModel;
-use Validator;
 
 class BaseModelTest extends TestCase
 {

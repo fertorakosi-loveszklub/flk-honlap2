@@ -43,7 +43,8 @@ $(document).ready(function() {
                 // Display preview
                 var link = data.result.data.link;
                 link = link.replace("http://", "https://");
-                $('#preview').attr('src', getThumbnail('t', link)).show();
+                link = getThumbnail('t', link);
+                $('#preview').attr('src', link).show();
 
                 // Enable controls
                 $('#imageprompt').hide();
@@ -68,12 +69,12 @@ $(document).ready(function() {
             points  : {
                 required: true,
                 min     : 1,
-                max     : 500
+                max     : 300
             },
             shots  : {
                 required: true,
                 min     : 1,
-                max     : 50
+                max     : 30
             },
             shot_at : {
                 required: true,
@@ -81,8 +82,8 @@ $(document).ready(function() {
             }
         },
         messages: {
-            shots       : 'Minimum 1, maximum 50 lövést írhatsz be.',
-            points      : 'Minimum 1, maximum 500 köregységet írhatsz be.',
+            shots       : 'Minimum 1, maximum 30 lövést írhatsz be.',
+            points      : 'Minimum 1, maximum 300 köregységet írhatsz be.',
             shot_at     : 'A következő formátumot használd: Év-hó-nap (2015-01-01)'
         }
     });

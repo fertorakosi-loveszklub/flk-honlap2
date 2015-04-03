@@ -71,6 +71,10 @@ td {
     margin-top: 10px;
 }
 
+.xtopmargin {
+    margin-top: 25px !important;    
+}
+
 .recordtable th:hover {
     cursor: pointer;
 }
@@ -81,6 +85,23 @@ td {
 
 .toggle-visibility {
     background: transparent;
+}
+
+.vmargin {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.sort {
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.fucking-pull-right {
+    width: auto;
 }
 
 /* Elements by ID */

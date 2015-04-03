@@ -1,4 +1,4 @@
-# flk-honlap2 [![Build Status](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2.svg?branch=master)](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2) [![GPL v3 License](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/fertorakosi-loveszklub/flk-honlap2/blob/master/LICENSE)
+# flk-honlap2 [![Build Status](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2.svg?branch=master)](https://travis-ci.org/fertorakosi-loveszklub/flk-honlap2) [![GPL v3 License](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/fertorakosi-loveszklub/flk-honlap2/blob/master/LICENSE) ![Version](https://img.shields.io/badge/version-2.1.0-yellow.svg)
 
 ## About
 This is the source code of the official website of the FLK (Fertőrákosi Lövészklub). The site is built with Laravel 5 and is unit-tested (functional tests are a work in progress).
@@ -6,8 +6,11 @@ This is the source code of the official website of the FLK (Fertőrákosi Lövé
 ## Requirements
  - A web server (live site uses nginx)
  - PHP 5.4+
-    - MCrypt extension
     - Apache module or php5-fpm for nginx
+    - Extensions:
+      - PDO for database access
+      - MCrypt 
+      - mbstring
     - php5-cli for artisan
  - A database (live site uses MySQL)
  - Git

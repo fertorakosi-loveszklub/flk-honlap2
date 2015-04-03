@@ -1,6 +1,98 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.1.0 - 2015-04-03
+  - Merged 2.1-dev into master.
+  - Released 2.1 stable
+
+2.1.0a4 - 2015-04-03
+  - Fixed a bug where the site crashed when there was no member associated with
+    the current user (should only occur to admins with unconnected profiles)
+  - Fixed the database structure:
+    - Foreign key payments.member_id has now ON DELETE CASCADE to avoid errors
+      when a member is deleted
+  - Fixed a bug, where soft-deleting a member created the payment overview to 
+    crash
+    - Fixed the same bug in the printable overview
+  - Fixed a bug where even admins received the message about required activation
+  - Fixed a very annoying "bug" where a '0' was left in the user table migration
+    file.
+  - Fixed a bug in the validator where 'unique' rule was not ignored when
+    updating eisting records
+    - Added an optional parameter for the validation method to specify ignored
+      fields
+  - Replaced the middleware specification in the AccountController with 'except'
+  - Fixed a bug where the UrlBeautifier was not properly declared in the 
+    AlbumController
+  - Fixed a bug in imgurthumbnail.js where https links were ignored.
+  - Fixed a server-client validation rule mismatch in imgupload.js
+
+2.1.0a3 - 2015-04-03
+  - Fixed a bug where the membership status was always paid in the detailed
+    printable view
+  - Fixed a bug where Member::getPaidUntil() ignored soft deletes
+  - Added option to switch between paid/non-paid/all members in the member
+    overview
+    - Created related controller actions
+  - Wrote unit tests
+    - Models
+      - App\Member
+      - App\Payment
+  - Removed 'use Validator' from BaseModelTest as it is ignored anyways
+
+2.1.0a2 - 2015-04-01
+  - Added amount to the payment
+    - Updated controller
+    - Updated model
+    - Updated creation view
+  - Member edit view now displays highest card id in use when adding new member
+  - Member overview now displays number of members
+  - Member overview now displays printable overview button
+  - Member overview now displays printable member overview button
+  - Payment overview now displays a printable overview button
+  - Create simple, printable views for member overview:
+    - printables.members.overview
+    - printables.members.single
+    - printables.payments.overview
+    - layouts.payments.printsettings
+
+2.1.0a1 - 2015-03-31
+  - Replaced absolute https url to the shortcut icon with relative
+  - Refactored controllers, library code, middlewares and models to follow 
+    the PSR coding formats
+    - Tests are only partially fixed (no namespaces, not matching method names)
+  - Implemented the registry of members
+    - Created migrations for the tables members and payments
+    - Created models
+      - App\Member
+      - App\Payment
+    - Created controllers
+      - MemberController
+        - Updated router to handle /tagok/* route with the MemberController
+      - PaymentController
+        - Updated router to handle /tagdij/* route with PaymentController
+    - Created views
+      - layouts.members
+        - .jsoninput
+        - .list
+        - .editor
+        - .own
+        - .connectable-members
+        - .connectable-users
+        - .waitinglist
+      - layouts.payments
+        - .new
+        - .list
+    - Added link to the member list to master layout
+    - Added link to the payment list to master layout
+    - Added link to the waiting list to master layout
+      - Added code querying waiting list
+    - Implemented a profile overview for users
+      - Added link to the profile to master layout
+    - Deleted is_activated column. A user is now considered active if it has a
+      non-null Member entity associated with it.
+      - Unit test checking that a new user is inactive by default
+
 2.0.0 - 2015-03-23
   - Added .travis.yml
   - Configured travis-ci support

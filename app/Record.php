@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Record extends BaseModel {
-
+class Record extends BaseModel
+{
     /**
      * The database table used by the model.
      *
@@ -16,7 +16,7 @@ class Record extends BaseModel {
         'category'      => 'exists:record_categories,id',
         'shots'         => 'integer|between:1,30',
         'points'        => 'integer|between:1,300',
-        'shot_at'       => 'date'
+        'shot_at'       => 'date',
     ];
 
     public function category()
