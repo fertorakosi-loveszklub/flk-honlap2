@@ -18,14 +18,24 @@ abstract class BaseModel extends Model implements ValidatableInterface
     /**
      * Validates the current object.
      *
+     * @param  $ignoredUniqueFields An array of unique keys to ignore. These
+     *                              will be ignored when  applying the 'unique'
+     *                              rule. Defaults to null.
      * @return bool A value indicating whether the object is valid.
      */
-    public function validate()
+    public function validate($ignoredUniqueFields = null)
     {
         $rules = $this->getValidationRules();
         if ($rules == null) {
             // If there are no validation rules, object is valid
             return true;
+        }
+
+        // Ignore rules specified in $ignoredUniqueIds
+        if (!is_null($ignoredUniqueFields)) {
+            foreach ($ignoredUniqueFields as $key) {
+                $rules[$key] .= "," . $this->id;
+            }
         }
 
         $validator = Validator::make($this["attributes"], $rules);

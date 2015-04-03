@@ -1,6 +1,28 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.1.0a4 - 2015-04-03
+  - Fixed a bug where the site crashed when there was no member associated with
+    the current user (should only occur to admins with unconnected profiles)
+  - Fixed the database structure:
+    - Foreign key payments.member_id has now ON DELETE CASCADE to avoid errors
+      when a member is deleted
+  - Fixed a bug, where soft-deleting a member created the payment overview to 
+    crash
+    - Fixed the same bug in the printable overview
+  - Fixed a bug where even admins received the message about required activation
+  - Fixed a very annoying "bug" where a '0' was left in the user table migration
+    file.
+  - Fixed a bug in the validator where 'unique' rule was not ignored when
+    updating eisting records
+    - Added an optional parameter for the validation method to specify ignored
+      fields
+  - Replaced the middleware specification in the AccountController with 'except'
+  - Fixed a bug where the UrlBeautifier was not properly declared in the 
+    AlbumController
+  - Fixed a bug in imgurthumbnail.js where https links were ignored.
+  - Fixed a server-client validation rule mismatch in imgupload.js
+
 2.1.0a3 - 2015-04-03
   - Fixed a bug where the membership status was always paid in the detailed
     printable view

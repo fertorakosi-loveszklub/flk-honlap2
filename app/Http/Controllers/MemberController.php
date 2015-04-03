@@ -15,11 +15,7 @@ class MemberController extends Controller
     public function __construct()
     {
         // Actions that need admin rights
-        $this->middleware('admin', ['only' => ['getIndex', 'getAdatBekeres',
-            'postAdatBekeres', 'getUj', 'postUj', 'getSzerkesztes',
-            'postSzerkesztes', 'getTorles', 'getFelhasznaloOsszekapcsolas',
-            'getFbOsszekapcsolasMost','getFbSzetkapcsolas',
-            'getTagOsszekapcsolas', 'getVarolista', 'getFizeto', 'getNemFizeto']]);
+        $this->middleware('admin', ['except' => 'getProfil']);
 
         // Actions that need login
         $this->middleware('auth', ['only' => ['getProfil']]);
@@ -188,7 +184,7 @@ class MemberController extends Controller
 
         $member->updateFromRequest($req);
 
-        if (!$member->validate()) {
+        if (!$member->validate(['card_id'])) {
             // Validation errors
             return view('layouts.members.editor')
                 ->with([

@@ -63,8 +63,15 @@ class PrintableController extends Controller
         $from = $req->get('from');
         $to = $req->get('to');
 
-        $payments = Payment::whereBetween("paid_at", [new \DateTime($from), new \DateTime($to)])->get();
-        $sum = Payment::whereBetween("paid_at", [new \DateTime($from), new \DateTime($to)])->sum('amount');
+        $payments = Payment::join('members', 'members.id', '=', 'payments.member_id')
+                           ->whereBetween("paid_at", [new \DateTime($from), new \DateTime($to)])
+                           ->whereNull('members.deleted_at')
+                           ->get();
+
+        $sum = Payment::join('members', 'members.id', '=', 'payments.member_id')
+                      ->whereBetween("paid_at", [new \DateTime($from), new \DateTime($to)])
+                      ->whereNull('members.deleted_at')
+                      ->sum('amount');
 
         return view('printables.payments.overview')->with([
                                                       'from'    => $from,

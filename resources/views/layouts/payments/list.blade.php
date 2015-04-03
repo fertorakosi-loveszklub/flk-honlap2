@@ -29,23 +29,25 @@
                 </thead>
                 <tbody class="list">
             @foreach($payments as $payment)
-                <tr>
-                    <td class="member-name">
-                        {{ $payment->member->name }} ({{ ((new DateTime($payment->member->birth_date))->format('Y. m. d.')) }})
-                    </td>
-                    <td class="paid-at">
-                        {{ $payment->paid_at }}
-                    </td>
-                    <td class="paid-until">
-                        {{ $payment->paid_until }}
-                    </td>
-                    <td class="Összeg">
-                        {{ $payment->amount }}
-                    </td>
-                    <td>
-                        <a href="/tagdij/torles/{{ $payment->id }}" class="confirm btn btn-primary"><i class="fa fa-fw fa-trash"></i></a>
-                    </td>
-                </tr>
+                @if(!is_null($payment->member))
+                    <tr>
+                        <td class="member-name">
+                            {{ $payment->member->name }} ({{ ((new DateTime($payment->member->birth_date))->format('Y. m. d.')) }})
+                        </td>
+                        <td class="paid-at">
+                            {{ $payment->paid_at }}
+                        </td>
+                        <td class="paid-until">
+                            {{ $payment->paid_until }}
+                        </td>
+                        <td class="Összeg">
+                            {{ $payment->amount }}
+                        </td>
+                        <td>
+                            <a href="/tagdij/torles/{{ $payment->id }}" class="confirm btn btn-primary"><i class="fa fa-fw fa-trash"></i></a>
+                        </td>
+                    </tr>
+                @endif
             @endforeach
                 </tbody>
             </table> 

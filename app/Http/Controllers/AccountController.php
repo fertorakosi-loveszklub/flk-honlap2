@@ -82,7 +82,7 @@ class AccountController extends BaseController
 
         // Check admin privileges
         $roles = $authorizer->getUsers($token);
-        $isAdmin = $authorizer->isAdmin($user['id'], $roles);
+        $isAdmin = $authorizer->isAdmin($user->id, $roles);
 
         // Only log in activated users.
         if ($isAdmin) {

@@ -81,7 +81,7 @@ class AlbumController extends BaseController
 
         $album->save();
 
-        return redirect('/album/'.$album->id.'/'.App\Libraries\UrlBeautifier::beautify($album->title))->with(
+        return redirect('/album/'.$album->id.'/'.UrlBeautifier::beautify($album->title))->with(
             'message',
             array( 'message' => 'Album létrehozva', 'type' => 'success')
         );

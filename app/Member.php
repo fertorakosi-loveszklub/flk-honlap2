@@ -18,11 +18,11 @@ class Member extends BaseModel
     protected $validationRules = [
         'name'          => 'required|min:4',
         'birth_date'    => 'required|date',
-        'birth_place'   => 'required:min:2',
+        'birth_place'   => 'required|min:2',
         'mother_name'   => 'required|min:4',
         'address'       => 'required|min:6',
         'member_since'  => 'required|date',
-        'card_id'       => 'unique:members',
+        'card_id'       => 'unique:members,card_id',
     ];
 
     /**

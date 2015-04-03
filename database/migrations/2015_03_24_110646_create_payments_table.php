@@ -20,7 +20,10 @@ class CreatePaymentsTable extends Migration {
 			$table->date('paid_at');
 			$table->date('paid_until');
 
-			$table->foreign('member_id')->references('id')->on('members');
+			$table->foreign('member_id')
+			      ->references('id')
+			      ->on('members')
+			      ->onDelete('cascade');
 		});
 	}
 
