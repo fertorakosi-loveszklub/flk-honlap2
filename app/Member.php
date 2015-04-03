@@ -59,6 +59,8 @@ class Member extends BaseModel
 
         $max = new \DateTime($maxPaid);
         $today = new \DateTime('now');
+        $today = $today->setTime(0, 0, 0);
+
         return $max >= $today;
     }
 
@@ -69,8 +71,8 @@ class Member extends BaseModel
      */
     public function getPaidUntil()
     {
-        return DB::table('payments')->where('member_id', '=', $this->id)
-                        ->max('paid_until');
+        return Payment::where('member_id', '=', $this->id)
+               ->max('paid_until');
     }
 
     /**

@@ -2,15 +2,30 @@
 
 @section('content')
     <div class="content">
-        <h1><i class="fa fa-fw fa-users"></i> Tagnyilvántartás</h1>
-        <h4 class="vmargin">Tagok száma: {{ $members->count() }}</h4>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h1><i class="fa fa-fw fa-users"></i> Tagnyilvántartás</h1>
+            </div>
+            <div class="col-xs-12 col-sm-6 xtopmargin pull-right fucking-pull-right">
+                <a href="/tagok/" class="btn btn-primary @if($view == 'all') active @endif">
+                Összes
+                </a>
+                <a href="/tagok/fizeto" class="btn btn-primary @if($view == 'paid') active @endif">
+                Fizető
+                </a>
+                <a href="/tagok/nem-fizeto" class="btn btn-primary @if($view == 'notpaid') active @endif">
+                Nem fizető
+                </a>
+            </div>
+        </div>
+        <h4 class="vmargin">Tagok száma: {{ count($members) }}</h4>
         <div id="member-list">
 
             <div class="row vmargin">
                 <div class="col-xs-6 col-sm-8">
                     <input type="text" class="form-control search" placeholder="Keresés (név, Facebook név vagy születési dátum)">
                 </div>
-                <div class="col-xs-6 col-sm-4">
+                <div class="col-xs-6 col-sm-4 pull-right fucking-pull-right">
                     <a class="btn btn-primary" href="/nyomtatas/tag-attekintes" target="_blank">
                         <i class="fa fa-fw fa-print"></i> Taglista
                     </a>

@@ -35,7 +35,7 @@ class Payment extends BaseModel
     public static function fromRequest($req)
     {
         $payment = new Payment;
-        $payment->member_id  = $req->has('member_id') ? $req->get('paid_at') : null;
+        $payment->member_id  = $req->has('member_id') ? $req->get('member_id') : null;
         $payment->paid_at    = $req->has('paid_at') ? $req->get('paid_at') : '';
         $payment->paid_until = $req->has('paid_until') ? $req->get('paid_until') : '';
         $payment->amount     = $req->has('amount') ? $req->get('amount') : '';

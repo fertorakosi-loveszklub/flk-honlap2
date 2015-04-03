@@ -19,7 +19,7 @@ class MemberController extends Controller
             'postAdatBekeres', 'getUj', 'postUj', 'getSzerkesztes',
             'postSzerkesztes', 'getTorles', 'getFelhasznaloOsszekapcsolas',
             'getFbOsszekapcsolasMost','getFbSzetkapcsolas',
-            'getTagOsszekapcsolas', 'getVarolista']]);
+            'getTagOsszekapcsolas', 'getVarolista', 'getFizeto', 'getNemFizeto']]);
 
         // Actions that need login
         $this->middleware('auth', ['only' => ['getProfil']]);
@@ -35,7 +35,62 @@ class MemberController extends Controller
         $members = Member::select('id', 'name', 'birth_date', 'card_id')
                             ->orderBy('name', 'asc')->get();
 
-        return view('layouts.members.list')->with(['members' => $members]);
+        return view('layouts.members.list')->with(['members' => $members,
+                                                   'view'    => 'all']);
+    }
+
+    /**
+     * GET method, fizeto route (/fizeto)
+     * @return Response
+     */
+    public function getFizeto()
+    {
+        $members = Member::whereHas('payments', function ($q) {
+            // CURDATE is not supported in all SQL servers (eg. sqlite)
+            $today = new \DateTime;
+            $today = $today->format('Y-m-d');
+
+            // Filter  paid_untils
+            $q->where('paid_until', '>=', $today);
+        })->get();
+
+        return view('layouts.members.list')->with(['members' => $members,
+                                                  'view'    => 'paid']);
+    }
+
+    /**
+     * GET method, nem-fizeto route (/nem-fizeto)
+     * @return Response
+     */
+    public function getNemFizeto()
+    {
+        // CURDATE is not supported in all SQL servers (eg. sqlite)
+        $today = new \DateTime;
+        $today = $today->format('Y-m-d');
+
+        // Get members with old (invalid)  payments
+        $oldPayments = Member
+                    ::select('*')
+                    ->join('payments', 'payments.member_id', '=', 'members.id')
+                    ->leftJoin(DB::raw('payments p2'), function ($join) {
+                        $join->on('payments.member_id', '=', 'p2.member_id');
+                        $join->on('payments.paid_until', '<', 'p2.paid_until');
+                        $join->whereNull('p2.member_id');
+                    })
+                    ->where('payments.paid_until', '<', $today)
+                    ->whereNull('payments.deleted_at')
+                    ->groupBy('members.id')
+                    ->get();
+
+        // Get members with no payment records
+        $noPayments = Member::has('payments', '=', 0)->get();
+
+        // Merge two result sets
+        $members = $oldPayments->merge($noPayments);
+
+                 
+        return view('layouts.members.list')->with(['members' => $members,
+                                                  'view'    => 'notpaid']);
     }
     
     /**

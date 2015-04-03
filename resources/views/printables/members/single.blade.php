@@ -42,7 +42,15 @@
             </tbody>
         </table>
         <h2>Tagdíj</h2>
-        <p>Utolsó fizetett tagdíj alapján tagsági viszonya <strong>{{ (new DateTime($member->getPaidUntil()))->format('Y. m. d.')}}-ig</strong> befizetve.</p>
+        @if($member->isPaid())
+        <p>
+            Utolsó fizetett tagdíj alapján tagsági viszonya <strong>{{ (new DateTime($member->getPaidUntil()))->format('Y. m. d.')}}-ig</strong> befizetve.
+        </p>
+        @else
+        <p>
+            A tagdíj befizetésre vár!
+        </p>
+        @endif
         <h2>Tagdíjfizetések</h2>
         <table class="borders">
             <thead>
