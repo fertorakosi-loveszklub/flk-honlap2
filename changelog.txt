@@ -1,6 +1,10 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.1.0 - 2015-04-03
+  - Merged 2.1-dev into master.
+  - Released 2.1 stable
+
 2.1.0a4 - 2015-04-03
   - Fixed a bug where the site crashed when there was no member associated with
     the current user (should only occur to admins with unconnected profiles)
