@@ -34,7 +34,7 @@ class FacebookAuthorizerTest extends TestCase
         ];
     }
 
-    public function test_if_user_list_is_returned()
+    public function testIfUserListIsReturned()
     {
         $response = Mockery::mock('FacebookResponse');
         $response->shouldReceive('getGraphList')
@@ -60,7 +60,7 @@ class FacebookAuthorizerTest extends TestCase
     /**
      * @expectedException App\Exceptions\FacebookRequestException
      */
-    public function test_if_correct_exception_is_thrown_in_user_list_getter()
+    public function testIfCorrectExceptionIsThrownInUserListGetter()
     {
         $fb = Mockery::mock('LaravelFacebookSdk');
         $fb->shouldReceive('setDefaultAccessToken')
@@ -76,7 +76,7 @@ class FacebookAuthorizerTest extends TestCase
         $output = $auth->getUsers(null);
     }
 
-    public function test_if_true_is_retured_when_user_isAdmin()
+    public function testIfTrueIsReturnedWhenUserIsAdmin()
     {
         $admin_id = '9012';
 
@@ -84,10 +84,12 @@ class FacebookAuthorizerTest extends TestCase
         $auth = new FacebookAuthorizer(null);
         $output = $auth->isAdmin($admin_id, $this->user_list_example);
 
-        $this->assertTrue($output, 'Failed asserting that FacebookAuthorizer::isAdmin() returns true when user is an admin.');
+        $this->assertTrue($output, 'Failed asserting that
+                          FacebookAuthorizer::isAdmin() returns true when use
+                          is an admin.');
     }
 
-    public function test_if_false_is_returned_when_user_is_not_admin()
+    public function testIfFalseIsReturnedWhenUserIsNotAdmin()
     {
         $user_id = '1234';
 
@@ -95,10 +97,12 @@ class FacebookAuthorizerTest extends TestCase
         $auth = new FacebookAuthorizer(null);
         $output = $auth->isAdmin($user_id, $this->user_list_example);
 
-        $this->assertFalse($output, 'Failed asserting that FacebookAuthorizer::isAdmin() returns false when user is not an admin.');
+        $this->assertFalse($output, 'Failed asserting that
+                           FacebookAuthorizer::isAdmin() returns false when user
+                           is not an admin.');
     }
 
-    public function test_if_false_is_returned_when_user_does_not_exist()
+    public function testIfFalseIsReturnedWhenUserDoesNotExist()
     {
         $user_id = 'I don\'t exist';
 
@@ -106,10 +110,12 @@ class FacebookAuthorizerTest extends TestCase
         $auth = new FacebookAuthorizer(null);
         $output = $auth->isAdmin($user_id, $this->user_list_example);
 
-        $this->assertFalse($output, 'Failed asserting that FacebookAuthorizer::isAdmin() returns false when user does not exist.');
+        $this->assertFalse($output, 'Failed asserting that
+                           FacebookAuthorizer::isAdmin() returns false when user
+                           does not exist.');
     }
 
-    public function test_if_user_is_marked_as_admin()
+    public function testIfUserIsMarkedIsAdmin()
     {
         // Facebook object should not be accessed
         $auth = new FacebookAuthorizer(null);

@@ -4,7 +4,7 @@ use App\User;
 
 class UserTest extends TestCase
 {
-    public function test_if_login_is_successful()
+    public function testIfLoginIsSuccessful()
     {
         $user = new User();
         $user->login();
@@ -17,7 +17,7 @@ class UserTest extends TestCase
             in after calling User::login()');
     }
 
-    public function test_if_user_name_is_saved_to_session_after_login()
+    public function testIfNameIsSavedToSessionAfterLogin()
     {
         $expected = 'Test Name';
 
@@ -28,7 +28,7 @@ class UserTest extends TestCase
         $this->assertSessionHas('user_full_name', $expected);
     }
 
-    public function test_if_the_user_logged_in_is_the_current_user()
+    public function testIfUserLoggedInIsCurrentUser()
     {
         $expected = '1234';
 
@@ -39,7 +39,7 @@ class UserTest extends TestCase
         $this->assertSame(Auth::user()->id, $expected);
     }
 
-    public function test_if_user_is_created_from_graph_object()
+    public function testIfUserIsCreatedFromGraphObject()
     {
         $expected = '1234';
 
@@ -53,7 +53,7 @@ class UserTest extends TestCase
         $this->assertSame($expected, $user->id);
     }
 
-    public function test_if_created_user_object_has_the_same_name_as_the_graph_object()
+    public function testIfCreatedUserHasSameName()
     {
         $expected = 'Test Name';
 
@@ -67,7 +67,7 @@ class UserTest extends TestCase
         $this->assertSame($expected, $user->name);
     }
 
-    public function test_if_name_is_updated_from_graph_object()
+    public function testIfNameIsUpdatedFromGraphObject()
     {
         $expected = 'New name';
 
@@ -83,28 +83,27 @@ class UserTest extends TestCase
         $this->assertSame($expected, $user->name);
     }
 
-    /**
-     * Validation tests.
-     */
-    public function test_if_name_must_be_at_least_4_characters()
+    public function testIfNameMustBeAtLeast4Characters()
     {
         $user = new User();
         $user->real_name = 'Test name';
         $user->name = 'xxx';
 
-        $this->assertFalse($user->validate(), 'Failed asserting that the name must be at least 4 characters.');
+        $this->assertFalse($user->validate(), 'Failed asserting that the name
+                           must be at least 4 characters.');
     }
 
-    public function test_if_real_name_must_be_at_least_4_characters()
+    public function testIfRealNameMustBeAtLEast4Characters()
     {
         $user = new User();
         $user->name = 'Test name';
         $user->real_name = 'xxx';
 
-        $this->assertFalse($user->validate(), 'Failed asserting that the real name must be at least 4 characters.');
+        $this->assertFalse($user->validate(), 'Failed asserting that the real
+                           name must be at least 4 characters.');
     }
 
-    public function test_if_new_user_is_not_activated()
+    public function testIfNewUserIsInactive()
     {
         $user = Mockery::mock('App\User[getAttribute]');
         $user->shouldReceive('getAttribute')
@@ -112,6 +111,7 @@ class UserTest extends TestCase
              ->once()
              ->andReturn(null);
 
-        $this->assertFalse($user->isActivated(), 'Failed asserting that a new user is inactive by default.');
+        $this->assertFalse($user->isActivated(), 'Failed asserting that a new
+                           user is inactive by default.');
     }
 }

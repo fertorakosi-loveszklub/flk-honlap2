@@ -29,10 +29,33 @@ class MemberController extends Controller
     public function getIndex()
     {
         $members = Member::select('id', 'name', 'birth_date', 'card_id')
-                            ->orderBy('name', 'asc')->get();
+                            ->orderBy('card_id', 'asc')->get();
 
         return view('layouts.members.list')->with(['members' => $members,
                                                    'view'    => 'all']);
+    }
+
+    /**
+     * GET method, json-exportalas route (/json-exportalas)
+     * @return Response
+     */
+    public function getJsonExportalas()
+    {
+        $members = Member::select('id', 'name', 'birth_date', 'card_id')
+                        ->get();
+
+        // Direct json_encode does not work because of the encryption
+        $response = array();
+        foreach($members as $member) {
+            array_push($response, [
+                "name"  => $member->name,
+                "birth_date" => $member->birth_date,
+                "card_id" => $member->card_id,
+                "id" => $member->id
+            ]);   
+        }
+
+        return response()->json($response);
     }
 
     /**

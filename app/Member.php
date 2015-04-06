@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Member extends BaseModel
 {
     use SoftDeletes;
+    use \KDuma\Eloquent\Encryptable;
 
+    protected $encrypted = ["name", "birth_place", "mother_name", "address"];
     protected $table = 'members';
     public $timestamps = false;
 

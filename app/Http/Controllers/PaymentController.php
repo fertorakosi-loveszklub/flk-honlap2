@@ -118,4 +118,74 @@ class PaymentController extends Controller
                                             'type'    => 'success'
                                          ]]);
     }
+
+    /**
+     * GET method, json-importalas route (/json-importalas)
+     * @return Response
+     */
+    public function getJsonImportalas()
+    {
+        return view('layouts.members.jsoninput');
+    }
+
+    /**
+     * POST method, json-importalas route (/json-importalas)
+     * @return Response
+     */
+    public function postJsonImportalas(Request $req)
+    {
+        if (!$req->has('data'))
+        {
+            return view('layouts.members.jsoninput')->with(['message' =>
+                [
+                    'message'   => "Hiányzó adat",
+                    'type'      => 'danger'
+                ]]);
+        }
+
+        /**
+         * Data should look like this:
+         * [
+         *      {
+         *          "member_id" : 1,
+         *          "paid_at"   : "2015-01-01",
+         *          "paid_until": "2015-13-31",
+         *          "amount"    : 5000
+         *      },
+         *      {
+         *          "member_id" : 1,
+         *          "paid_at"   : "2015-01-01",
+         *          "paid_until": "2015-13-31",
+         *          "amount"    : 5000
+         *      }
+         * ]
+         */
+        
+        // Add payments
+        $data = json_decode($req->get('data'));
+        $error = 0;
+        $success = 0;
+
+        foreach ($data as $p) {
+            $payment = new Payment;
+            $payment->member_id  = $p->member_id;
+            $payment->paid_at    = $p->paid_at;
+            $payment->paid_until = $p->paid_until;
+            $payment->amount     = $p->amount;
+
+            // Validate
+            if (!$payment->validate()) {
+                $error++;
+                continue;
+            }
+
+            $payment->save();
+            $success++;
+        }
+
+        return redirect('/tagdij/')->with(['message' => [
+                'message'   => "Fizetések könyvelve. $success sikeres, $error hibás adat",
+                'type'      => $error > 0 ? "warning" : "success"
+            ]]);
+    }
 }

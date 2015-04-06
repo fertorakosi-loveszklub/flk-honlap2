@@ -4,7 +4,7 @@ use App\Album;
 
 class AlbumTest extends TestCase
 {
-    public function test_if_title_has_to_be_at_least_3_characters()
+    public function testIfTitleHasToBeAtLeast3Characters()
     {
         $album = new Album();
         $album->title = 'x';
@@ -13,7 +13,7 @@ class AlbumTest extends TestCase
         $this->assertFalse($album->validate(), 'Failed asserting that title has to be at least 3 characters long.');
     }
 
-    public function test_if_album_url_has_to_be_at_least_20_characters()
+    public function testIfAlbumUrlHasToBeAtLeast3Characters()
     {
         $album = new Album();
         $album->title = 'Test title';

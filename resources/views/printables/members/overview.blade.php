@@ -7,7 +7,7 @@
             }
             th, td{
                 border-bottom: 1px solid black;
-                padding: 2px;
+                padding: 5px;
             }
         </style>
     </head>
@@ -18,10 +18,11 @@
         <hr/>
         <table>
             <thead>
-                <th>Ig. szám</th>
+                <th>Ig.sz.</th>
                 <th>Név</th>
                 <th>Szül.</th>
                 <th>Lakcím</th>
+                <th>Csatl.</th>
             </thead>
             <tbody>
                 @foreach($members as $member)
@@ -30,6 +31,7 @@
                     <td>{{$member->name}}</td>
                     <td>{{$member->birth_place}}, {{(new DateTime($member->birth_date))->format('Y. m. d.')}}</td>
                     <td>{{$member->address}}</td>
+                    <td>{{(new DateTime($member->member_since))->format('Y. m. d.')}}</td>
                 </tr>
                 @endforeach
             </tbody>

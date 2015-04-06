@@ -1,6 +1,21 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.2.0 - 2015-04-06
+  - Added encryption for the member model
+    - Following fields are encrypted on the fly:
+      - Name, address, mother name, birth place
+    - Created test methods for testing on-the-fly encryption
+  - Added another parameter for the validation method allowing to specify
+    encrypted fields. These are decrypted during validation to check if they are
+    valid.
+  - Implemented more unit tests (testing validations)
+    - App\Member
+    - App\Payment
+  - Implemented JSON export for members
+  - Implemented JSON import for payments
+
+
 2.1.0 - 2015-04-03
   - Merged 2.1-dev into master.
   - Released 2.1 stable

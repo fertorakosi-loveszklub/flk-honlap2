@@ -4,7 +4,7 @@ use App\News;
 
 class NewsTest extends TestCase
 {
-    public function test_if_title_has_to_be_at_least_4_characters()
+    public function testIfTitleHasToBeAtLeast4Characters()
     {
         $news = new News();
         $news->title = 'xxx';

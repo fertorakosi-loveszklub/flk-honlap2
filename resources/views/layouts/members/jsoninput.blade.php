@@ -5,7 +5,7 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
             <div class="form-group">
-                <label for="data">Régi formátumú JSON adat</label>
+                <label for="data">JSON adat</label>
                 <textarea name="data" rows="8" cols="32" class="form-control" ></textarea>
             </div>
             <p>Figyelem, a beírt adatok egyszerűen mentésre kerülnek, szinkronizáció nélkül!</p>
