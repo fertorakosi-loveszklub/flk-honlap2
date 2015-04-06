@@ -24,7 +24,7 @@ class PrintableController extends Controller
      */
     public function getTagAttekintes()
     {
-        $members = Member::orderBy('name', 'asc')->get();
+        $members = Member::orderBy('card_id', 'asc')->get();
         return view('printables.members.overview')->with(['members' => $members]);
     }
 

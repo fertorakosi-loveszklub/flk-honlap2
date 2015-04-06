@@ -22,15 +22,18 @@
         <div id="member-list">
 
             <div class="row vmargin">
-                <div class="col-xs-6 col-sm-8">
+                <div class="col-xs-12 col-sm-6">
                     <input type="text" class="form-control search" placeholder="Keresés (név, Facebook név vagy születési dátum)">
                 </div>
-                <div class="col-xs-6 col-sm-4 pull-right fucking-pull-right">
+                <div class="col-xs-12 col-sm-6 pull-right fucking-pull-right">
                     <a class="btn btn-primary" href="/nyomtatas/tag-attekintes" target="_blank">
                         <i class="fa fa-fw fa-print"></i> Taglista
                     </a>
                     <a class="btn btn-primary" href="/tagok/uj">
                         <i class="fa fa-fw fa-user-plus"></i> Új tag
+                    </a>
+                    <a class="btn btn-primary" href="/tagok/json-exportalas" target="_blank">
+                        <i class="fa fa-fw fa-external-link"></i> JSON Exportálás
                     </a>
                 </div>
             </div>

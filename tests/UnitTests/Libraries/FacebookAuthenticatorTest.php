@@ -9,7 +9,7 @@ use App\Libraries\FacebookAuthenticator;
  */
 class FacebookAuthenticatorTest extends TestCase
 {
-    public function test_if_token_is_returned()
+    public function testIfTokenIsReturned()
     {
         $expected = '1234';
 
@@ -27,7 +27,7 @@ class FacebookAuthenticatorTest extends TestCase
     /**
      * @expectedException App\Exceptions\AuthTokenException
      */
-    public function test_if_exception_is_thrown_when_no_token_returned()
+    public function testIfExceptionIsThrownWhenNoTokenIsReturned()
     {
         $fb = Mockery::mock('LaravelFacebookSdk');
         $fb->shouldReceive('getAccessTokenFromRedirect')
@@ -42,7 +42,7 @@ class FacebookAuthenticatorTest extends TestCase
     /**
      * @expectedException App\Exceptions\AuthTokenException
      */
-    public function test_if_correct_exception_is_thrown_in_token_getter()
+    public function testIfCorrectExceptionIsThrownInTokenGetter()
     {
         $fb = Mockery::mock('LaravelFacebookSdk');
         $fb->shouldReceive('getAccessTokenFromRedirect')
@@ -54,7 +54,7 @@ class FacebookAuthenticatorTest extends TestCase
         $auth->getTokenFromRedirect();
     }
 
-    public function test_extending_unextended_token()
+    public function testExtendingUnextendingToken()
     {
         $expected = '1234';
 
@@ -77,7 +77,7 @@ class FacebookAuthenticatorTest extends TestCase
         $this->assertSame($expected, $output);
     }
 
-    public function test_extending_already_extended_token()
+    public function testExtendingAlreadyExtendedToken()
     {
         $token = Mockery::mock('Token');
 
@@ -97,7 +97,7 @@ class FacebookAuthenticatorTest extends TestCase
     /**
      * @expectedException App\Exceptions\AuthTokenException
      */
-    public function test_if_correct_exception_is_thrown_in_token_extender()
+    public function testIfCorrectExceptionIsThrownWhenTokenExtensionFails()
     {
         $token = Mockery::mock('Token');
 
@@ -115,7 +115,7 @@ class FacebookAuthenticatorTest extends TestCase
         $output = $auth->extendToken($token);
     }
 
-    public function test_if_graph_user_is_returned()
+    public function testIfGraphUserIsReturned()
     {
         $expected = 'Hi I am a graph user object';
 
@@ -139,7 +139,7 @@ class FacebookAuthenticatorTest extends TestCase
     /**
      * @expectedException App\Exceptions\FacebookRequestException
      */
-    public function test_if_correct_exception_is_thrown_in_graph_user_getter()
+    public function testIfCorrectExceptionIsThrownInGraphUserGetter()
     {
         $response = Mockery::mock('FacebookResponse');
         $response->shouldReceive('getGraphUser')

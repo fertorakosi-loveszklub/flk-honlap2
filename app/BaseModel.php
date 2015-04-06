@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use Crypt;
 use Illuminate\Database\Eloquent\Model;
 use Validator;
 
@@ -21,9 +22,14 @@ abstract class BaseModel extends Model implements ValidatableInterface
      * @param  $ignoredUniqueFields An array of unique keys to ignore. These
      *                              will be ignored when  applying the 'unique'
      *                              rule. Defaults to null.
+     *                              Make sure to make the 'unique' rule the last
+     *                              in the rule definitions!
+     * @param  $encryptedFields     Array of the names of the fields that should
+     *                              be decrypted before validation.
      * @return bool A value indicating whether the object is valid.
      */
-    public function validate($ignoredUniqueFields = null)
+    public function validate($ignoredUniqueFields = null,
+                                $encryptedFields = null)
     {
         $rules = $this->getValidationRules();
         if ($rules == null) {
@@ -38,7 +44,17 @@ abstract class BaseModel extends Model implements ValidatableInterface
             }
         }
 
-        $validator = Validator::make($this["attributes"], $rules);
+        // Get fields
+        $fields = $this["attributes"];
+
+        // Decrypt encrypted fields
+        if (!is_null($encryptedFields)) {
+            foreach ($encryptedFields as $key) {
+                $fields[$key] = Crypt::decrypt($fields[$key]);
+            }
+        }
+
+        $validator = Validator::make($fields, $rules);
 
         if ($validator->fails()) {
             // Errors during validation

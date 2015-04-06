@@ -4,7 +4,7 @@ use App\BaseModel;
 
 class BaseModelTest extends TestCase
 {
-    public function test_if_validation_passes_if_there_are_no_rules()
+    public function testIfValidationPassesIfThereAreNoRules()
     {
         $baseModel = Mockery::mock('App\BaseModel[getValidationRules]');
         $baseModel->shouldReceive('getValidationRules')
@@ -14,7 +14,7 @@ class BaseModelTest extends TestCase
         $this->assertTrue($baseModel->validate(), 'Failed asserting that validation passes if there are no validation rules defined.');
     }
 
-    public function test_if_validation_passes_if_validator_reports_success()
+    public function testIfValidationPassesIfValidatorReportsSuccess()
     {
         // Validator should not fail
         $validator = Mockery::mock('MockedValidator');
@@ -36,7 +36,7 @@ class BaseModelTest extends TestCase
         $this->assertTrue($baseModel->validate(), 'Failed asserting that validation passes when the Validator reports success.');
     }
 
-    public function test_if_validation_fails_if_validator_reports_failure()
+    public function testIfValidationFailsWhenValidatorReportsFailure()
     {
         // Validator should fail
         $validator = Mockery::mock('MockedValidator');
@@ -61,7 +61,7 @@ class BaseModelTest extends TestCase
         $this->assertFalse($baseModel->validate(), 'Failed asserting that validation fails when the Validator reports failure.');
     }
 
-    public function test_if_error_messages_are_set_when_validation_fails()
+    public function testIfErrorMessagesAreSetWhenValidatorFails()
     {
         $expected = ['message' => 'Expected error message'];
 

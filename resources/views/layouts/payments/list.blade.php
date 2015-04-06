@@ -6,13 +6,16 @@
 
         <div class="payment-list">
             <div class="row vmargin ">
-                <div class="col-xs-6 col-sm-8">
+                <div class="col-xs-6 col-sm-7">
                     <input type="text" class="search form-control" placeholder="Keresés (név, dátum)">
                 </div>
-                <div class="col-xs-6 col-sm-4">
+                <div class="col-xs-6 col-sm-5 pull-right fucking-pull-right">
                     <a class="btn btn-primary" href="/nyomtatas/tagdij-attekintes" 
                         target="_blank">
                         <i class="fa fa-fw fa-print"></i> Áttekintés
+                    </a>
+                    <a class="btn btn-primary" href="/tagdij/json-importalas">
+                        <i class="fa fa-fw fa-external-link"></i> Importálás
                     </a>
                 </div>
             </div>
