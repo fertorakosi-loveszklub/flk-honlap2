@@ -2,6 +2,7 @@
 
 ## About
 This is the source code of the official website of the FLK (Fertőrákosi Lövészklub). The site is built with Laravel 5 and is unit-tested (functional tests are a work in progress).
+Personal data of the members stored in the database is encrypted, they are decrypted on-the-fly while using the site.
 
 ## Requirements
  - A web server (live site uses nginx)
