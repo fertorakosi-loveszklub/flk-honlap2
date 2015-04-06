@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration {
 			$table->string('real_name')->nullable();
 			$table->integer('member_id')->unsigned()->nullable();
 
+			$table->primary('id');
 			$table->foreign('member_id')->references('id')->on('members');
 		});
 	}
