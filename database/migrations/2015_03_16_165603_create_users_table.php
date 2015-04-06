@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration {
 			$table->string('remember_token')->nullable();
 			$table->string('access_token')->nullable();
 			$table->string('real_name')->nullable();
-			$table->integer('member_id')->usngigned()->nullable();
+			$table->integer('member_id')->unsigned()->nullable();
 
 			$table->foreign('member_id')->references('id')->on('members');
 		});
