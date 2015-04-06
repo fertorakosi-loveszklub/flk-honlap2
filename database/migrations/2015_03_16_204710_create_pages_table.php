@@ -16,7 +16,7 @@ class CreatePagesTable extends Migration {
 		{
 			$table->string('id');
 			$table->string('title');
-			$table->string('content');
+			$table->longText('content');
 
 			$table->primary('id');
 		});
