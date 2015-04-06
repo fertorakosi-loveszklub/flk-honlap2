@@ -16,7 +16,7 @@ class CreatePaymentsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->softDeletes();
-			$table->integer('member_id');
+			$table->integer('member_id')->unsigned();
 			$table->date('paid_at');
 			$table->date('paid_until');
 
