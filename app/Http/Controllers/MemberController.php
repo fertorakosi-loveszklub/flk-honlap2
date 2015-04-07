@@ -250,6 +250,14 @@ class MemberController extends Controller
                         ]);
         }
 
+        // Also, disconnect Facebook user
+        $user = User::where('member_id', '=', $id)->first();
+        if (!is_null($user)) {
+            $user->member_id = null;
+            $user->save();
+        }
+
+        // Delete member
         $member->delete();
 
         return redirect('/tagok/')
@@ -266,7 +274,7 @@ class MemberController extends Controller
      *
      * @return Response
      */
-    public function getAdatBekeres()
+    public function getJsonImportalas()
     {
         return view('layouts.members.jsoninput');
     }
@@ -276,7 +284,7 @@ class MemberController extends Controller
      *
      * @return Response
      */
-    public function postAdatBekeres(Request $req)
+    public function postJsonImportalas(Request $req)
     {
         $data = $req->get('data');
         $data = json_decode($data);
@@ -452,7 +460,7 @@ class MemberController extends Controller
         }
 
         // Get members without a connected profile
-        $members = DB::table('members')->whereNotIn('id', function ($q) {
+        $members = Member::whereNotIn('id', function ($q) {
             $q->whereNotNull('member_id')->select('member_id')->from('users');
         })->get();
 

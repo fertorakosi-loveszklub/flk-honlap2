@@ -1,6 +1,15 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.2.1 - 2015-04-07
+  - Fixed a bug where names were displayed encrypted in the member connecting
+    view.
+  - Fixed a bug where dates in the record overview page were displayed in an 
+    incorrect format
+  - Renamed /tagok/adat-bekeres to /tagok/json-importalas and added a link to it
+    in the member overview
+  - Deleting a member now also disconnects the associated FB user
+
 2.2.0 - 2015-04-06
   - Added encryption for the member model
     - Following fields are encrypted on the fly:
@@ -14,7 +23,6 @@ Changelog of the project flk-honlap2
     - App\Payment
   - Implemented JSON export for members
   - Implemented JSON import for payments
-
 
 2.1.0 - 2015-04-03
   - Merged 2.1-dev into master.

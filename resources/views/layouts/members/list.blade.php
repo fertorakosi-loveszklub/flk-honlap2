@@ -26,14 +26,17 @@
                     <input type="text" class="form-control search" placeholder="Keresés (név, Facebook név vagy születési dátum)">
                 </div>
                 <div class="col-xs-12 col-sm-6 pull-right fucking-pull-right">
-                    <a class="btn btn-primary" href="/nyomtatas/tag-attekintes" target="_blank">
-                        <i class="fa fa-fw fa-print"></i> Taglista
-                    </a>
                     <a class="btn btn-primary" href="/tagok/uj">
                         <i class="fa fa-fw fa-user-plus"></i> Új tag
                     </a>
+                    <a class="btn btn-primary" href="/nyomtatas/tag-attekintes" target="_blank">
+                        <i class="fa fa-fw fa-print"></i> Lista
+                    </a>
                     <a class="btn btn-primary" href="/tagok/json-exportalas" target="_blank">
-                        <i class="fa fa-fw fa-external-link"></i> JSON Exportálás
+                        <i class="fa fa-fw fa-external-link"></i> JSON
+                    </a>
+                    <a class="btn btn-primary" href="/tagok/json-importalas" target="_blank">
+                        <i class="fa fa-fw fa-user-plus"></i> JSON
                     </a>
                 </div>
             </div>

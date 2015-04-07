@@ -58,7 +58,7 @@ function displayData(targetTable, data) {
     data.forEach(function(entry) {
         var row = '<tr>';
         row +=  '<td>' + entry.real_name + '</td>';
-        row +=  '<td>' + entry.shot_at + '</td>';
+        row +=  '<td>' + formatDate(entry.shot_at) + '</td>';
         row +=  '<td>' + entry.points + '</td>';
         row +=  '<td>' + entry.shots + '</td>';
         row +=  '<td>' + entry.record + '</td>';
@@ -69,4 +69,9 @@ function displayData(targetTable, data) {
 
     targetTable.show();
     $('.fancyImage').fancybox();
+}
+
+function formatDate(date) {
+    date = new Date(date);
+    return date.getFullYear() + ". " + date.getMonth() + ". " + date.getDate() + ".";
 }
