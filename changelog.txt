@@ -1,6 +1,12 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.2.2 - 2015-04-07
+  - Deleting a member now also disconnects the associated FB user
+  - Reorganized member actions into 2 rows
+  - Printable member overview now displays whether member has paid member fee
+  - Changed DB column type to longText for encrypted fields of the member table
+
 2.2.1 - 2015-04-07
   - Fixed a bug where names were displayed encrypted in the member connecting
     view.
@@ -8,7 +14,6 @@ Changelog of the project flk-honlap2
     incorrect format
   - Renamed /tagok/adat-bekeres to /tagok/json-importalas and added a link to it
     in the member overview
-  - Deleting a member now also disconnects the associated FB user
 
 2.2.0 - 2015-04-06
   - Added encryption for the member model

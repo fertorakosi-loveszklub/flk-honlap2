@@ -23,6 +23,7 @@
                 <th>Szül.</th>
                 <th>Lakcím</th>
                 <th>Csatl.</th>
+                <th>Tagdíj</th>
             </thead>
             <tbody>
                 @foreach($members as $member)
@@ -32,6 +33,7 @@
                     <td>{{$member->birth_place}}, {{(new DateTime($member->birth_date))->format('Y. m. d.')}}</td>
                     <td>{{$member->address}}</td>
                     <td>{{(new DateTime($member->member_since))->format('Y. m. d.')}}</td>
+                    <td>{{ $member->isPaid() ? "&#10004;" : "x"}}</td>
                 </tr>
                 @endforeach
             </tbody>

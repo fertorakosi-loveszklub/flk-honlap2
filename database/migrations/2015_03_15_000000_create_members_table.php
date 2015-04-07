@@ -16,11 +16,11 @@ class CreateMembersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->softDeletes();
-			$table->string('name');
+			$table->longText('name');
 			$table->date('birth_date');
-			$table->string('birth_place');
-			$table->string('mother_name');
-			$table->string('address');
+			$table->longText('birth_place');
+			$table->longText('mother_name');
+			$table->longText('address');
 			$table->date('member_since');
 			$table->integer('card_id')->nullable();
 		});

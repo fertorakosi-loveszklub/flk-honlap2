@@ -68,15 +68,18 @@
                             @if(is_null($member->user))
                                 <a class="btn btn-primary btn-keep-size" href="/tagok/felhasznalo-osszekapcsolas/{{ $member->id }}"><i class="fa fa-fw fa-chain"></i> Összekapcsolás</a>
                             @else
-                                <a class="btn btn-primary btn-keep-size" href="/tagok/fb-szetkapcsolas/{{ $member->id }}"><i class="fa fa-fw fa-chain-broken"></i> {{ $member->user->name }}</a>
+                                <a class="btn btn-primary btn-keep-size" href="/tagok/fb-szetkapcsolas/{{ $member->id }}">
+                                    <i class="fa fa-fw fa-chain-broken"></i> {{ strlen($member->user->name) <= 16 ? $member->user->name : substr($member->user->name, 0, 13) . '...' }}
+                                </a>
                             @endif
                         </td>
                         <td class="member-actions">
                             <a class="btn btn-primary" title="Szerkesztés" href="/tagok/szerkesztes/{{ $member->id }}"><i class="fa fa-fw fa-pencil"></i></a>
                             <a class="btn btn-primary" title="Részletek nyomtatása"
-                            href="/nyomtatas/tag-reszletek/{{ $member->id }}" target="_blank">
+                               href="/nyomtatas/tag-reszletek/{{ $member->id }}" target="_blank">
                                 <i class="fa fa-fw fa-print"></i>
                             </a>
+                            <br/>
                             <a class="btn btn-primary" title="Tagdíjfizetés könyvelése"
                             href="/tagdij/fizetes/{{ $member->id }}">
                                 <i class="fa fa-fw fa-money"></i>
