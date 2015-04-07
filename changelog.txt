@@ -4,6 +4,7 @@ Changelog of the project flk-honlap2
 2.2.3 - 2015-04-07
   - Changed the size of the main container to 800px
   - Moved the member actions back to one row
+  - Added title to the new payment view
 
 2.2.2 - 2015-04-07
   - Deleting a member now also disconnects the associated FB user

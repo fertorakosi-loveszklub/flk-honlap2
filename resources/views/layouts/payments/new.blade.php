@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="content">
+        <h1> Tagdíjfizetés könyvelése</h1>
         <form class="form form-horizontal" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
