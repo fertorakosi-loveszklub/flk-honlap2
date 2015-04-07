@@ -79,7 +79,6 @@
                                href="/nyomtatas/tag-reszletek/{{ $member->id }}" target="_blank">
                                 <i class="fa fa-fw fa-print"></i>
                             </a>
-                            <br/>
                             <a class="btn btn-primary" title="Tagdíjfizetés könyvelése"
                             href="/tagdij/fizetes/{{ $member->id }}">
                                 <i class="fa fa-fw fa-money"></i>

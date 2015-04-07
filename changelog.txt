@@ -1,6 +1,10 @@
 Changelog of the project flk-honlap2
 (c) 2015 Zsolt Fekete - nXu
 
+2.2.3 - 2015-04-07
+  - Changed the size of the main container to 800px
+  - Moved the member actions back to one row
+
 2.2.2 - 2015-04-07
   - Deleting a member now also disconnects the associated FB user
   - Reorganized member actions into 2 rows
