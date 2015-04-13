@@ -41,8 +41,7 @@ class MemberController extends Controller
      */
     public function getJsonExportalas()
     {
-        $members = Member::select('id', 'name', 'birth_date', 'card_id')
-                        ->get();
+        $members = Member::get();
 
         // Direct json_encode does not work because of the encryption
         $response = array();
@@ -51,7 +50,11 @@ class MemberController extends Controller
                 "name"  => $member->name,
                 "birth_date" => $member->birth_date,
                 "card_id" => $member->card_id,
-                "id" => $member->id
+                "id" => $member->id,
+                "mother_name" => $member->mother_name,
+                "address" => $member->address,
+                "birth_place" => $member->birth_date,
+                "member_since" => $member->member_since
             ]);   
         }
 
