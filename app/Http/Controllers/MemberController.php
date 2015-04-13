@@ -53,7 +53,7 @@ class MemberController extends Controller
                 "id" => $member->id,
                 "mother_name" => $member->mother_name,
                 "address" => $member->address,
-                "birth_place" => $member->birth_date,
+                "birth_place" => $member->birth_place,
                 "member_since" => $member->member_since
             ]);   
         }
