@@ -73,5 +73,5 @@ function displayData(targetTable, data) {
 
 function formatDate(date) {
     date = new Date(date);
-    return date.getFullYear() + ". " + date.getMonth() + ". " + date.getDate() + ".";
+    return date.getFullYear() + ". " + (date.getMonth() + 1) + ". " + date.getDate() + ".";
 }
